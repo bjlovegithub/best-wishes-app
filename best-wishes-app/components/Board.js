@@ -1,18 +1,22 @@
 'use strict';
 
-import { Component } from 'react';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-class Board extends Component {
+import Wish from './Wish';
+
+import styles from '../styles/main';
+
+class Board extends React.Component {
   constructor(props) {
-	super(props);
+    super(props);
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+      <View style={styles.board}>
+        <Wish />
+        <Wish />
       </View>
     );
   }
