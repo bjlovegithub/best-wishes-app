@@ -15,8 +15,9 @@ class Board extends React.Component {
   render() {
     return (
       <View style={styles.board}>
-        <Wish />
-        <Wish />
+        <Wish style={styles.wish} />
+        <Wish style={styles.wish} />
+        <Wish style={styles.wish} />
       </View>
     );
   }
