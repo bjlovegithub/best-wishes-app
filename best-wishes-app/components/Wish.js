@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 
 export default class Wish extends React.Component {
   constructor(props) {
@@ -11,9 +11,8 @@ export default class Wish extends React.Component {
   render() {
     return (
       <View>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+        <Text>My Simple Wish</Text>
+        <Text>My Simple Wish</Text>
       </View>
     );
   }

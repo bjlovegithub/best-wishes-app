@@ -10,6 +10,7 @@ export default StyleSheet.create({
 
   wish: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    marginTop: 100,
   }
 });

@@ -13,9 +13,11 @@ export default class App extends React.Component {
   render() {
     const menu = <Menu onItemSelected={this.onMenuItemSelected} />;
     return (
+      <View style={{marginTop: 20, flex: 1}}>
       <SideMenu menu={menu}>
         <Board />
       </SideMenu>
+      </View>
     );
   };
 }
