@@ -10,7 +10,11 @@ export default class Wish extends React.Component {
     this.state = { wish: undefined, thumbs: 0 } ;
   }
 
-  async function getData() {
+  componentWillMount() {
+    this.getData().done();
+  }
+
+  getData = async () => {
     try {
       const response = await fetch(
         'http://localhost:9999/wish/' + this.props.id, {
@@ -21,15 +25,11 @@ export default class Wish extends React.Component {
           }
         }
       );
-      return await response.json();
+      const data = await response.json();
+      this.setState({ wish: data.wish, thumbs: data.thumbs });	  
     } catch (error) {
       console.error(error);
     }
-  }
-
-  componentWillMount() {
-    const data = getData();
-    this.setState({ wish: data.wish, thumbs: data.thumbs });
   }
 
   render() {
@@ -38,17 +38,16 @@ export default class Wish extends React.Component {
         <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center', color: 'blue'}}>
           {this.state.wish}
         </Text>
-      </View>
-
-      <Image style={{
-            //flex: 1,
-            width: 20,
-            height: 20,
-            bottom: 0,
-            left: 10
+        <Image style={{
+          //flex: 1,
+          width: 20,
+          height: 20,
+          bottom: 0,
+          left: 10
         }}
         source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
-      />
+        />
+      </View>
     );
   }
 }
