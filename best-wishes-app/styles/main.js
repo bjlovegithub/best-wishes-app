@@ -5,12 +5,10 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    //justifyContent: 'space-between',
   },
 
   wish: {
-    flex: 5,
-    backgroundColor: 'white',
-    marginTop: 100
+    backgroundColor: 'white'
   }
 });

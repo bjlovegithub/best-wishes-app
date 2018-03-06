@@ -8,10 +8,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/wish/:id', function (req, res) {
-  const id = req.param.id;
-
+  const id = req.params.id;
   if (id === "1") {
-	res.send({"wish": "this is wish 1.", "thumbs": 1})
+	   res.send({"wish": "this is wish 1.", "thumbs": 1})
   }
   else if (id === "2") {
 	res.send({"wish": "this is wish 2.", "thumbs": 2})

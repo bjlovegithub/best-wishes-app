@@ -26,7 +26,7 @@ export default class Wish extends React.Component {
         }
       );
       const data = await response.json();
-      this.setState({ wish: data.wish, thumbs: data.thumbs });	  
+      this.setState({ wish: data.wish, thumbs: data.thumbs });
     } catch (error) {
       console.error(error);
     }
@@ -34,19 +34,21 @@ export default class Wish extends React.Component {
 
   render() {
     return (
-      <View style={{paddingBottom: 20,}}>
-        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center', color: 'blue'}}>
+	     <View style={{flexDirection: 'column', flex: 1}}>
+        <Text style={{fontSize: 20, fontWeight: 'bold', color: 'blue', flex: 6}}>
           {this.state.wish}
         </Text>
+        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', marginBottom: 0}}>
         <Image style={{
-          //flex: 1,
           width: 20,
           height: 20,
-          bottom: 0,
-          left: 10
         }}
         source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
         />
+ 		     <Text>
+        {this.state.thumbs}
+        </Text>
+        </View>
       </View>
     );
   }
