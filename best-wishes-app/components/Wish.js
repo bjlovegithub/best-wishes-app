@@ -3,33 +3,23 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
+import Store from '../stores/Store';
+
 export default class Wish extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { wish: undefined, thumbs: 0 } ;
+    this.state = { wish: undefined, thumbs: 0, sid: undefined } ;
   }
 
   componentWillMount() {
-    this.getData().done();
+    this.setState(Store.getWish(this.props.id));
+
+    Store.addChangeListener(this._onChange);
   }
 
-  getData = async () => {
-    try {
-      const response = await fetch(
-        'http://localhost:9999/wish/' + this.props.id, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          }
-        }
-      );
-      const data = await response.json();
-      this.setState({ wish: data.wish, thumbs: data.thumbs });
-    } catch (error) {
-      console.error(error);
-    }
+  componentWillUnmount() {
+    Store.removeChangeListener(this._onChange);
   }
 
   render() {

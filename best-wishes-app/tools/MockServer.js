@@ -10,13 +10,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/wish/:id', function (req, res) {
   const id = req.params.id;
   if (id === "1") {
-	   res.send({"wish": "this is wish 1.", "thumbs": 1})
+	   res.send({"wish": "this is wish 1.", "thumbs": 1, "sid": "sid1"})
   }
   else if (id === "2") {
-	res.send({"wish": "this is wish 2.", "thumbs": 2})
+	res.send({"wish": "this is wish 2.", "thumbs": 2, "sid": "sid2"})
   }
   else {
-	res.send({wish: "this is wish 3.", thumbs: 3})
+	res.send({wish: "this is wish 3.", thumbs: 3, "sid": "sid3"})
   }
 });
 
