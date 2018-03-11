@@ -3,23 +3,35 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
-import Store from '../stores/Store';
+import Store from '../store/Store';
 
 export default class Wish extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { wish: undefined, thumbs: 0, sid: undefined } ;
+    const id = props.id;
+
+    this.state = {};
+    this.state[id] = {wish: undefined, thumbs: 0, sid: undefined};
+
+    this.onChange = this.onChange.bind(this);
   }
 
   componentWillMount() {
-    this.setState(Store.getWish(this.props.id));
+    Store.fetchWish(this.props.id);
 
-    Store.addChangeListener(this._onChange);
+    Store.addChangeListener(this.onChange);
   }
 
   componentWillUnmount() {
-    Store.removeChangeListener(this._onChange);
+    Store.removeChangeListener(this.onChange);
+  }
+
+  onChange() {
+    const map = Store.getWish(this.props.id);
+    if (map !== undefined && map != null) {
+      this.setState(map);
+    }
   }
 
   render() {

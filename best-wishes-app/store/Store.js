@@ -3,12 +3,13 @@
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
+const EVENT = "event";
+
 var wishMap = {}
 
-var Store = function() {};
-Store.prototype = assign({}, EventEmitter.prototype, {
+var Store = assign({}, EventEmitter.prototype, {
 
-  getData = async (id) => {
+  async getData(id) {
     try {
       const response = await fetch(
         'http://localhost:9999/wish/' + id, {
@@ -21,17 +22,34 @@ Store.prototype = assign({}, EventEmitter.prototype, {
       );
       const data = await response.json();
       wishMap[id] = { wish: data.wish, thumbs: data.thumbs, sid: data.sid };
+
+      this.emitChange();
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 
-  getWish = (id) => {
+  fetchWish(id) {
     if (wishMap[id] === undefined) {
-      getData(id).done();
+      this.getData(id);
     }
+  },
 
+  getWish(id) {
     return wishMap[id];
-  }
+  },
 
-}
+  emitChange() {
+    this.emit(EVENT);
+  },
+
+  addChangeListener(callback) {
+    this.on(EVENT, callback);
+  },
+
+  removeChangeListener(callback) {
+    this.removeListener(EVENT, callback);
+  },
+});
+
+module.exports = Store;
