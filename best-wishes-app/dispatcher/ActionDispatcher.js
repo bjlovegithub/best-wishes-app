@@ -6,14 +6,12 @@ import assign from 'object-assign';
 var callbacks = [];
 var promises = [];
 
-var Dispatcher = function() {};
-Dispatcher.prototype = assign({}, Dispatcher.prototype, {
-  register: function(callback) {
+var ActionDispatcher = assign({}, Object.prototype, {
+  register(callback) {
     callbacks.push(callback);
   },
 
   dispatch: function(payload) {
-    // First create array of promises for callbacks to reference.
     var resolves = [];
     var rejects = [];
     promises = callbacks.map(function(_, i) {
@@ -33,4 +31,4 @@ Dispatcher.prototype = assign({}, Dispatcher.prototype, {
   }
 });
 
-module.exports = Dispatcher;
+module.exports = ActionDispatcher;

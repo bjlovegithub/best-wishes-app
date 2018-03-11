@@ -4,6 +4,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
 import Store from '../store/Store';
+import Actions from '../actions/Actions';
 
 export default class Wish extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ export default class Wish extends React.Component {
     this.state[id] = {wish: undefined, thumbs: 0, sid: undefined};
 
     this.onChange = this.onChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentWillMount() {
@@ -34,21 +36,28 @@ export default class Wish extends React.Component {
     }
   }
 
+  handleClick() {
+    console.log("click");
+    Actions.thumbUp(this.props.id);
+  }
+
   render() {
     return (
 	     <View style={{flexDirection: 'column', flex: 1}}>
         <Text style={{fontSize: 20, fontWeight: 'bold', color: 'blue', flex: 6}}>
           {this.state.wish}
         </Text>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', marginBottom: 0}}>
-        <Image style={{
-          width: 20,
-          height: 20,
-        }}
-        source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
+        <View style={{
+          flex: 1, flexDirection: 'row', justifyContent: 'center',
+          alignItems: 'center', backgroundColor: 'white', marginBottom: 0
+        }}>
+        <Image
+          style={{ width: 20, height: 20 }}
+          source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
+          onClick={this.handleClick}
         />
- 		     <Text>
-        {this.state.thumbs}
+ 		    <Text>
+          {this.state.thumbs}
         </Text>
         </View>
       </View>

@@ -1,13 +1,13 @@
 'use strict';
 
-import Dispatcher from '../dispatcher/Dispatcher';
-import Commons from '../common/Commons';
+import ActionDispatcher from '../dispatcher/ActionDispatcher';
+import Common from '../common/Common';
 
 var Actions = {
 
   thumbUp: function(wishId) {
-    AppDispatcher.dispatch({
-      type: Commons.ACT_THUMB_UP,
+    ActionDispatcher.dispatch({
+      type: Common.ACT_THUMB_UP,
       wishId: wishId
     });
   }

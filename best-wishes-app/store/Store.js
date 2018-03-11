@@ -3,35 +3,16 @@
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
+import ActionDispatcher from '../dispatcher/ActionDispatcher'
+
 const EVENT = "event";
 
-var wishMap = {}
+var wishMap = {};
 
 var Store = assign({}, EventEmitter.prototype, {
-
-  async getData(id) {
-    try {
-      const response = await fetch(
-        'http://localhost:9999/wish/' + id, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          }
-        }
-      );
-      const data = await response.json();
-      wishMap[id] = { wish: data.wish, thumbs: data.thumbs, sid: data.sid };
-
-      this.emitChange();
-    } catch (error) {
-      console.error(error);
-    }
-  },
-
   fetchWish(id) {
     if (wishMap[id] === undefined) {
-      this.getData(id);
+      getData(id);
     }
   },
 
@@ -49,7 +30,71 @@ var Store = assign({}, EventEmitter.prototype, {
 
   removeChangeListener(callback) {
     this.removeListener(EVENT, callback);
-  },
+  }
+});
+
+async function getData(id) {
+  try {
+    const response = await fetch(
+      'http://localhost:9999/wish/' + id, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+    const data = await response.json();
+    wishMap[id] = { wish: data.wish, thumbs: data.thumbs, sid: data.sid };
+
+    Store.emitChange();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function updateThumbs(id) {
+  try {
+    const sid = wishMap[id].sid;
+
+    const response = await fetch(
+      'http://localhost:9999/wish/' + id, {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'PATCH',
+        body: JSON.stringify({ 'sid': sid, 'thumbs': wishMap[id].thumbs })
+      }
+    );
+    await response.json();
+
+    if (response.ok) {
+      Store.emitChange();
+    }
+    else {
+      console.log("Update thumbs failed: "+sid);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+ActionDispatcher.register(function(action) {
+  switch (action.type) {
+    case Common.ACT_THUMB_UP:
+      const wishId = action.wishId;
+      if (wishMap[wishId] === undefined) {
+        // no wish loaded yet, do nothing.
+      }
+      else {
+        wishMap[wishId].thumbs += 1;
+      }
+      break;
+    default:
+      console.log("Unknown action: " + action.type);
+  }
 });
 
 module.exports = Store;
