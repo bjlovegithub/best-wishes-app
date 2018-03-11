@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
@@ -37,7 +37,6 @@ export default class Wish extends React.Component {
   }
 
   handleClick() {
-    console.log("click");
     Actions.thumbUp(this.props.id);
   }
 
@@ -51,11 +50,12 @@ export default class Wish extends React.Component {
           flex: 1, flexDirection: 'row', justifyContent: 'center',
           alignItems: 'center', backgroundColor: 'white', marginBottom: 0
         }}>
-        <Image
-          style={{ width: 20, height: 20 }}
-          source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
-          onClick={this.handleClick}
-        />
+        <TouchableOpacity onPress={this.handleClick}>
+          <Image
+            style={{ width: 20, height: 20 }}
+            source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
+          />
+        </TouchableOpacity>
  		    <Text>
           {this.state.thumbs}
         </Text>

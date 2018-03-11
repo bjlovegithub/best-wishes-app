@@ -4,6 +4,7 @@ import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
 import ActionDispatcher from '../dispatcher/ActionDispatcher'
+import Common from '../common/Common'
 
 const EVENT = "event";
 
@@ -90,6 +91,8 @@ ActionDispatcher.register(function(action) {
       }
       else {
         wishMap[wishId].thumbs += 1;
+
+        updateThumbs(wishId);
       }
       break;
     default:
