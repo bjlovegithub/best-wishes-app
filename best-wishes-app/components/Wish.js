@@ -1,12 +1,10 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
-
-const window = Dimensions.get('window');
 
 class Wish extends React.Component {
   constructor(props) {

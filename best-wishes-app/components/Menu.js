@@ -57,7 +57,7 @@ class Menu extends React.Component {
   onItemSelected() {}
 
   handleClick() {
-
+    this.props.navigation.navigate('Home');
   }
 
   render() {

@@ -1,20 +1,26 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
 import SideMenu from 'react-native-side-menu';
 
-import Board from './components/Board';
-import Menu from './components/Menu';
+import { StackNavigator } from 'react-navigation';
 
-export default class App extends React.Component {
-  render() {
-    const menu = <Menu />;
-    return (
-      <View style={{marginTop: 20, flex: 1}}>
-        <SideMenu menu={menu}>
-          <Board />
-        </SideMenu>
-      </View>
-    );
-  };
-}
+import Board from './components/Board';
+import Login from './components/Login';
+import HomeScreen from './components/Home';
+
+export default StackNavigator({
+  Board1: {
+    screen: Board,
+  },
+  Details: {
+    screen: Login,
+  },
+  Home: {
+    screen: HomeScreen,
+  }
+},
+
+{
+  initialRouteName: 'Board1',
+});

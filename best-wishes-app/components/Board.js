@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, View, ImageBackground, Image, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Image, ScrollView, Dimensions, Button } from 'react-native';
 
 import Wish from './Wish';
 import styles from '../styles/main';
@@ -11,6 +11,8 @@ const window = Dimensions.get('window');
 class Board extends React.Component {
   constructor(props) {
     super(props);
+
+    console.log(props);
   }
 
   render() {
@@ -36,6 +38,10 @@ class Board extends React.Component {
         >
           <Wish id='3' style={styles.wish} />
     		</ImageBackground>
+        <Button
+          title="Go to Details"
+          onPress={() => this.props.navigation.navigate('Details')}
+        />
       </View>
     );
   }
