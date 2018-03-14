@@ -11,11 +11,10 @@ const window = Dimensions.get('window');
 class Board extends React.Component {
   constructor(props) {
     super(props);
-
-    console.log(props);
   }
 
   render() {
+    console.log(this.props.screenProps.rootNavigation.navigate);
     return (
       <View style={styles.board} >
       <ImageBackground style={{
@@ -40,7 +39,7 @@ class Board extends React.Component {
     		</ImageBackground>
         <Button
           title="Go to Details"
-          onPress={() => this.props.navigation.navigate('Details')}
+          onPress={() => this.props.screenProps.rootNavigation.navigate('Details')}
         />
       </View>
     );

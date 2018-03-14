@@ -10,9 +10,6 @@ import Login from './components/Login';
 import HomeScreen from './components/Home';
 
 export default StackNavigator({
-  Board1: {
-    screen: Board,
-  },
   Details: {
     screen: Login,
   },
@@ -22,5 +19,5 @@ export default StackNavigator({
 },
 
 {
-  initialRouteName: 'Board1',
+  initialRouteName: 'Home',
 });
