@@ -10,7 +10,7 @@ import Login from './components/Login';
 import HomeScreen from './components/Home';
 
 export default StackNavigator({
-  Details: {
+  Login: {
     screen: Login,
   },
   Home: {

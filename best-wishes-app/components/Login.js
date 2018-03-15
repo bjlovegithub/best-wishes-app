@@ -3,14 +3,27 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
-class DetailsScreen extends React.Component {
+import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+
+import Store from '../store/Store'
+
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {isLogin: false};
+  }
+
+
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Details Screen</Text>
-      </View>
+      <GoogleSigninButton
+        style={{width: 48, height: 48}}
+        size={GoogleSigninButton.Size.Icon}
+        color={GoogleSigninButton.Color.Dark}
+        onPress={this._signIn.bind(this)}/>
     );
   }
 }
 
-module.exports = DetailsScreen;
+module.exports = Login;

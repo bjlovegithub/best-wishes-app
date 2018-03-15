@@ -14,7 +14,7 @@ class HomeScreen extends React.Component {
   render() {
     const menu = <Menu screenProps={{ rootNavigation: this.props.navigation }} />;
     return (
-      <View style={{marginTop: 20, flex: 1}}>
+      <View style={{flex: 1}}>
         <SideMenu menu={menu}>
           <Board screenProps={{ rootNavigation: this.props.navigation }}/>
         </SideMenu>

@@ -14,7 +14,6 @@ class Board extends React.Component {
   }
 
   render() {
-    console.log(this.props.screenProps.rootNavigation.navigate);
     return (
       <View style={styles.board} >
       <ImageBackground style={{
@@ -37,10 +36,6 @@ class Board extends React.Component {
         >
           <Wish id='3' style={styles.wish} />
     		</ImageBackground>
-        <Button
-          title="Go to Details"
-          onPress={() => this.props.screenProps.rootNavigation.navigate('Details')}
-        />
       </View>
     );
   }
