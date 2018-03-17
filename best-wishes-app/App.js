@@ -5,9 +5,9 @@ import SideMenu from 'react-native-side-menu';
 
 import { StackNavigator } from 'react-navigation';
 
-import Board from './components/Board';
-import Login from './components/Login';
-import HomeScreen from './components/Home';
+import Board from './src/components/Board';
+import Login from './src/components/Login';
+import HomeScreen from './src/components/Home';
 
 export default StackNavigator({
   Login: {
