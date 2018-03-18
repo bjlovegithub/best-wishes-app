@@ -12,9 +12,15 @@ import HomeScreen from './src/components/Home';
 export default StackNavigator({
   Login: {
     screen: Login,
+    navigationOptions: {
+      title: 'Login',
+		}
   },
   Home: {
     screen: HomeScreen,
+    navigationOptions: {
+      title: 'Best Wishes',
+		}
   }
 },
 

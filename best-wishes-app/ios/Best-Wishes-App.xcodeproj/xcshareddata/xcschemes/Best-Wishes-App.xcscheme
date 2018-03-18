@@ -99,6 +99,13 @@
             ReferencedContainer = "container:Best-Wishes-App.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "GOOLE_AUTH_ID"
+            value = "com.googleusercontent.apps.241139739568-oqrrk998b60tc8d0b3e4bhjnf4bms0qh"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
