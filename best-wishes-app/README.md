@@ -9,4 +9,5 @@ including xcode project files for iOS.
 To have xcode project files for apps created by `create-react-native-app`,
 `react-native eject` to get those files.
 
-## 
+## Google SignIn
+Following this [https://www.codementor.io/microsem31/react-native-google-and-facebook-authentication-cohpznykf | article] to enable Google Sign In.

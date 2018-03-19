@@ -3,11 +3,12 @@
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
-import ActionDispatcher from '../dispatcher/ActionDispatcher'
-import Common from '../common/Common'
+import ActionDispatcher from '../dispatcher/ActionDispatcher';
+import Common from '../common/Common';
 
 const EVENT = "event";
 
+// map to save data for wishes
 var wishMap = {};
 
 var Store = assign({}, EventEmitter.prototype, {

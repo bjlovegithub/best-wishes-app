@@ -3,7 +3,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
-import Store from '../store/Store';
+import Store from '../store/WishStore';
 import Actions from '../actions/Actions';
 
 class Wish extends React.Component {
