@@ -5,28 +5,49 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 
-import Store from '../store/Store'
+import AuthStore from '../store/AuthStore';
+import Actions from '../actions/Actions';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {isLogin: false};
+    this.state = {isLogin: false, picUrl: ''};
+
+    this.googleSignIn = this.googleSignIn.bind(this);
+    this.googleSignOut = this.googleSignOut.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
     this.setupGoogleSignin();
+
+    AuthStore.addChangeListener(this.onChange);
+
+    Actions.loadAuthToken();
   }
 
-  googleAuth() {
+  onChange() {
+    console.log(AuthStore.getAuthInfo());
+    this.setState(AuthStore.getAuthInfo());
+  }
+
+  googleSignIn() {
     GoogleSignin.signIn()
       .then((user) => {
-        console.log(user);
+        Actions.saveAuthToken(user, "google-auth-token");
       })
       .catch((err) => {
         console.log('WRONG SIGNIN', err);
       })
       .done();
+  }
+
+  googleSignOut() {
+    GoogleSignin.revokeAccess().then(() => GoogleSignin.signOut()).then(() => {
+      Actions.deleteAuthToken("google-auth-token");
+    })
+    .done();
   }
 
   async setupGoogleSignin() {
@@ -38,7 +59,6 @@ class Login extends React.Component {
       });
 
       const user = await GoogleSignin.currentUserAsync();
-      console.log(user);
     }
     catch (err) {
       console.log("Google signin error", err.code, err.message);
@@ -46,11 +66,33 @@ class Login extends React.Component {
   }
 
   render() {
-    return (
-      <View>
-        <GoogleSigninButton style={{width: 212, height: 48}} size={GoogleSigninButton.Size.Standard} color={GoogleSigninButton.Color.Auto} onPress={this.googleAuth.bind(this)}/>
-      </View>
-    );
+    if (this.state.isLogin) {
+      return (
+        <View>
+          <Image
+            style={{ width: 20, height: 20 }}
+            source={{uri: this.state.picUrl}}
+          />
+          <TouchableOpacity onPress={() => {this.googleSignOut(); }}>
+            <View style={{marginTop: 50}}>
+              <Text>Log out</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    else {
+      return (
+        <View>
+          <GoogleSigninButton
+            style={{width: 212, height: 48}}
+            size={GoogleSigninButton.Size.Standard}
+            color={GoogleSigninButton.Color.Auto}
+            onPress={this.googleSignIn.bind(this)}/>
+        </View>
+      );
+    }
+
   }
 }
 

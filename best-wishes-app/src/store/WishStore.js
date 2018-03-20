@@ -97,7 +97,7 @@ ActionDispatcher.register(function(action) {
       }
       break;
     default:
-      console.log("Unknown action: " + action.type);
+      console.log("Unknown action for WishStore: " + action.type);
   }
 });
 
