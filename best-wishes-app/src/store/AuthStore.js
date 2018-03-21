@@ -33,6 +33,10 @@ var Store = assign({}, EventEmitter.prototype, {
       id: '',
       data: tokenInfo
     });
+
+    auth = {isLogin: true, picUrl: tokenInfo.photo, name: tokenInfo.name};
+
+    this.emitChange();
   },
 
   loadAuthToken() {
@@ -42,8 +46,9 @@ var Store = assign({}, EventEmitter.prototype, {
       autoSync: true,
       syncInBackground: true,
     }).then(ret => {
-      auth = {isLogin: true, picUrl: ret.photo};
+      console.log("-------->: "+ret);
 
+      auth = {isLogin: true, picUrl: ret.photo, name: ret.name};
       this.emitChange();
     }).catch(err => {
       console.warn(err.message);
@@ -54,6 +59,17 @@ var Store = assign({}, EventEmitter.prototype, {
             break;
       }
     });
+  },
+
+  deleteAuthToken(provider) {
+    storage.remove({
+      key: provider,
+      id: ''
+    });
+
+    auth = {isLogin: false};
+
+    this.emitChange();
   },
 
   getAuthInfo() {
@@ -81,8 +97,8 @@ ActionDispatcher.register(function(action) {
     case Common.ACT_SAVE_AUTH_TOKEN:
       Store.saveAuthToken(action.tokenInfo);
       break;
-    case Common.ACT_LOAD_AUTH_TOKEN:
-      Store.loadAuthToken();
+    case Common.ACT_DELETE_AUTH_TOKEN:
+      Store.deleteAuthToken(action.provider);
       break;
     default:
       console.log("Unknown action for AuthStore: " + action.type);

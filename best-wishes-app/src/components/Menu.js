@@ -11,6 +11,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import AuthStore from '../store/AuthStore';
+import Actions from '../actions/Actions';
+
 const window = Dimensions.get('window');
 const uri = 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png';
 
@@ -48,10 +51,21 @@ class Menu extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {logo: uri, name: "Happy ;)"};
+    this.state = {isLogin: false, picUrl: uri, name: "Happy ;)"};
 
     this.onItemSelected = this.onItemSelected.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
+
+  componentDidMount() {
+    AuthStore.addChangeListener(this.onChange);
+
+    Actions.loadAuthToken();
+  }
+
+  onChange() {
+    this.setState(AuthStore.getAuthInfo());
   }
 
   onItemSelected() {}
@@ -67,7 +81,7 @@ class Menu extends React.Component {
           <TouchableOpacity onPress={this.handleClick}>
             <Image
               style={styles.avatar}
-              source={{uri: this.state.logo}}
+              source={{uri: this.state.picUrl}}
             />
           </TouchableOpacity>
           <Text style={styles.name}>{this.state.name}</Text>

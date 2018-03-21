@@ -12,7 +12,7 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {isLogin: false, picUrl: ''};
+    this.state = {isLogin: false, picUrl: '', name: ''};
 
     this.googleSignIn = this.googleSignIn.bind(this);
     this.googleSignOut = this.googleSignOut.bind(this);
@@ -70,7 +70,7 @@ class Login extends React.Component {
       return (
         <View>
           <Image
-            style={{ width: 20, height: 20 }}
+            style={{ width: 80, height: 80 }}
             source={{uri: this.state.picUrl}}
           />
           <TouchableOpacity onPress={() => {this.googleSignOut(); }}>
