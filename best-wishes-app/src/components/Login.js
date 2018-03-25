@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 
-import AuthStore from '../store/AuthStore';
+import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
 
 class Login extends React.Component {
@@ -22,7 +22,7 @@ class Login extends React.Component {
   componentDidMount() {
     this.setupGoogleSignin();
 
-    AuthStore.addChangeListener(this.onChange);
+    AuthStore.addChangeListener({"type": "auth_event", "callback": this.onChange});
 
     Actions.loadAuthToken();
   }

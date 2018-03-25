@@ -7,6 +7,7 @@ import { StackNavigator } from 'react-navigation';
 
 import Board from './src/components/Board';
 import Login from './src/components/Login';
+import MyWish from './src/components/MyWish';
 import HomeScreen from './src/components/Home';
 
 export default StackNavigator({
@@ -20,6 +21,12 @@ export default StackNavigator({
     screen: HomeScreen,
     navigationOptions: {
       title: 'Best Wishes',
+		}
+  },
+  MyWish: {
+    screen: MyWish,
+    navigationOptions: {
+      title: 'My Wish',
 		}
   }
 },

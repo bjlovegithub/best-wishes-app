@@ -3,7 +3,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
-import Store from '../store/WishStore';
+import Store from '../store/Store';
 import Actions from '../actions/Actions';
 
 class Wish extends React.Component {
@@ -22,11 +22,11 @@ class Wish extends React.Component {
   componentWillMount() {
     Store.fetchWish(this.props.id);
 
-    Store.addChangeListener(this.onChange);
+    Store.addChangeListener({"type": "wish_event", "callback": this.onChange});
   }
 
   componentWillUnmount() {
-    Store.removeChangeListener(this.onChange);
+    Store.removeChangeListener({"type": "wish_event", "callback": this.onChange});
   }
 
   onChange() {

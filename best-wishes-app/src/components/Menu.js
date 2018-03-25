@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import AuthStore from '../store/AuthStore';
+import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
 
 const window = Dimensions.get('window');
@@ -59,7 +59,7 @@ class Menu extends React.Component {
   }
 
   componentDidMount() {
-    AuthStore.addChangeListener(this.onChange);
+    AuthStore.addChangeListener({"type": "auth_event", "callback": this.onChange});
 
     Actions.loadAuthToken();
   }
