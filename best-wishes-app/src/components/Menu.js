@@ -68,7 +68,16 @@ class Menu extends React.Component {
     this.setState(AuthStore.getAuthInfo());
   }
 
-  onItemSelected() {}
+  onItemSelected(sig) {
+    if (sig === 'My Wishes') {
+      if (this.state.isLogin) {
+        this.props.screenProps.rootNavigation.navigate('MyWish');
+      }
+      else {
+        this.props.screenProps.rootNavigation.navigate('Login');
+      }
+    }
+  }
 
   handleClick() {
     this.props.screenProps.rootNavigation.navigate('Login');
@@ -88,10 +97,10 @@ class Menu extends React.Component {
         </View>
 
         <Text
-          onPress={() => this.onItemSelected('About')}
+          onPress={() => this.onItemSelected('My Wishes')}
           style={styles.item}
         >
-          About
+          My Wishes
         </Text>
 
         <Text

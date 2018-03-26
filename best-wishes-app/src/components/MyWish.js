@@ -9,27 +9,24 @@ import Actions from '../actions/Actions';
 class MyWish extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {isLogin: false, picUrl: '', name: ''};
 
     this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
-    this.setupGoogleSignin();
-
-    Store.addChangeListener(this.onChange);
-
-    Actions.loadAuthToken();
   }
 
   onChange() {
-    console.log(Store.getAuthInfo());
     this.setState(Store.getAuthInfo());
   }
 
   render() {
-
+    return (
+    <View>
+      <Text>Hahaha</Text>
+    </View>
+    );
   }
 }
 
