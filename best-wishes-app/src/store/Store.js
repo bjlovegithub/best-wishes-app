@@ -11,11 +11,14 @@ import { AsyncStorage } from 'react-native';
 
 const AUTH_EVENT = "auth_event";
 const WISH_EVENT = "wish_event";
+const MYWISH_LOADED_EVENT = "mywish_loaded_event";
 
 var auth = {};
 
 // map to save data for wishes
 var wishMap = {};
+
+var myWish = [];
 
 // internal storage
 var storage = new Storage({
@@ -48,7 +51,10 @@ var Store = assign({}, EventEmitter.prototype, {
       data: tokenInfo
     });
 
-    auth = {isLogin: true, picUrl: tokenInfo.photo, name: tokenInfo.name};
+    auth = {
+      isLogin: true, picUrl: tokenInfo.photo,
+      name: tokenInfo.name, user_id: tokenInfo.id
+    };
 
     this.emitChange(AUTH_EVENT);
   },
@@ -60,8 +66,6 @@ var Store = assign({}, EventEmitter.prototype, {
       autoSync: true,
       syncInBackground: true,
     }).then(ret => {
-      console.log("-------->: "+ret);
-
       auth = {isLogin: true, picUrl: ret.photo, name: ret.name};
       this.emitChange(AUTH_EVENT);
     }).catch(err => {
@@ -88,6 +92,14 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getAuthInfo() {
     return auth;
+  },
+
+  loadMyWish() {
+    loadMyWish();
+  },
+
+  getMyWish() {
+    return {'wish': myWish}
   },
 
   emitChange(eventType) {
@@ -151,6 +163,26 @@ async function updateThumbs(id) {
   }
 }
 
+async function loadMyWish() {
+  try {
+    const response = await fetch(
+      'http://localhost:9999/my_wish/' + auth.user_id, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+    const data = await response.json();
+    myWish = data;
+
+    Store.emitChange(MYWISH_LOADED_EVENT);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 ActionDispatcher.register(function(action) {
   switch (action.type) {
     case Common.ACT_THUMB_UP:
@@ -172,6 +204,9 @@ ActionDispatcher.register(function(action) {
       break;
     case Common.ACT_DELETE_AUTH_TOKEN:
       Store.deleteAuthToken(action.provider);
+      break;
+    case Common.ACT_LOAD_MY_WISH:
+      Store.loadMyWish(action.provider);
       break;
     default:
       console.log("Unknown action for AuthStore: " + action.type);

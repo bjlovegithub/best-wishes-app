@@ -28,9 +28,14 @@ var Actions = {
   },
 
   loadAuthToken: function() {
-    console.log("xxxxxxxxx")
     ActionDispatcher.dispatch({
-      type: Common.ACT_LOAD_AUTH_TOKEN
+      type: Common.ACT_LOAD_AUTH_TOKEN,
+    });
+  },
+
+  loadMyWish: function() {
+    ActionDispatcher.dispatch({
+      type: Common.ACT_LOAD_MY_WISH,
     });
   },
 };

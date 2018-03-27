@@ -28,6 +28,10 @@ router.patch('/wish/:id', function (req, res) {
   res.send({status: 'OK'});
 });
 
+router.get('/my_wish/:id', function (req, res) {
+  res.send([{'content': 'test'}, {'content': 'test1'}]);
+});
+
 app.use("/", router);
 
 const server = http.createServer(app);
