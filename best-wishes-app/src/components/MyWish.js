@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
@@ -29,7 +29,7 @@ class MyWish extends React.Component {
 
   	for(let i = 0; i < this.state.wish.length; i++) {
   		wishArr.push(
-  			<View key = {i}>
+  			<View key = {i} style = {{flex:1}}>
   				<Text>
   					{ this.state.wish[i].content }
   				</Text>
@@ -37,16 +37,11 @@ class MyWish extends React.Component {
   		)
   	}
 
-    console.log(this.state.wish.length);
-
   	return (
-  		<View>
-  			<View>
-  				<View><Text>No</Text></View>
-  				<View><Text>Name</Text></View>
-  				<View><Text>Preference</Text></View>
-  			</View>
-  			{ wishArr }
+  		<View style={{flex:1}} contentContainerStyle={{flex:1}}>
+        <ScrollView>
+  			   { wishArr }
+        </ScrollView>
   		</View>
   	);
   }
