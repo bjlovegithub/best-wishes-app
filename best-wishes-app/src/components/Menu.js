@@ -69,13 +69,16 @@ class Menu extends React.Component {
   }
 
   onItemSelected(sig) {
-    if (sig === 'My Wishes') {
-      if (this.state.isLogin) {
+    if (this.state.isLogin) {
+      if (sig === 'My Wishes') {
         this.props.screenProps.rootNavigation.navigate('MyWish');
       }
-      else {
-        this.props.screenProps.rootNavigation.navigate('Login');
+      else if (sig === 'New Wish') {
+        this.props.screenProps.rootNavigation.navigate('NewWish');
       }
+    }
+    else {
+      this.props.screenProps.rootNavigation.navigate('Login');
     }
   }
 
@@ -104,10 +107,10 @@ class Menu extends React.Component {
         </Text>
 
         <Text
-          onPress={() => this.onItemSelected('Contacts')}
+          onPress={() => this.onItemSelected('New Wish')}
           style={styles.item}
         >
-          Contacts
+          New Wish
         </Text>
       </ScrollView>
     );
