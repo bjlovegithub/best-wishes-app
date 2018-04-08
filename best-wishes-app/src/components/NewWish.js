@@ -25,6 +25,7 @@ class ExpandingTextInput extends React.Component {
         {...this.props}
         ref={(view) => (this.textInput = view)}
         multiline
+        autoFocus={true}
         onContentSizeChange={(event) => {
           if (event && event.nativeEvent && event.nativeEvent.contentSize) {
             this.setState({
