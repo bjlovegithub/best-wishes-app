@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Picker } from 'react-native';
 
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
@@ -43,7 +43,7 @@ class ExpandingTextInput extends React.Component {
 class NewWish extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {wish: []};
+    this.state = {wish: '', fontFamily: 'Helvetica', fontSize: 20};
 
     this.onChange = this.onChange.bind(this);
   }
@@ -57,10 +57,32 @@ class NewWish extends React.Component {
   render() {
     return (
       <View>
-      <ExpandingTextInput
-        maxLength={1024}
-        underlineColorAndroid={'transparent'}
-      />
+        <ExpandingTextInput
+          maxLength={1024}
+          underlineColorAndroid={'transparent'}
+          onChangeText={(text) => this.setState({
+            wish: text,
+            fontFamily: this.state.fontFamily,
+            fontSize: this.state.fontSize,
+          })}
+          style={
+            {
+              fontFamily: this.state.fontFamily,
+              fontSize: this.state.fontSize,
+            }
+          }
+        />
+        <Picker
+          selectedValue={this.state.fontFamily}
+          style={{ height: 50, width: 100 }}
+          onValueChange={(itemValue, itemIndex) => this.setState({
+            wish: this.state.wish,
+            fontFamily: itemValue,
+            fontSize: this.state.fontSize,
+        })}>
+          <Picker.Item label="Helvetica" value="Helvetica" />
+          <Picker.Item label="Optima" value="Optima" />
+        </Picker>
       </View>
   	);
   }
