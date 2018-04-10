@@ -43,7 +43,7 @@ class ExpandingTextInput extends React.Component {
 class NewWish extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {wish: '', fontFamily: 'Helvetica', fontSize: 20};
+    this.state = {wish: '', fontFamily: 'Helvetica', fontSize: 20, fontColor: 'black'};
 
     this.onChange = this.onChange.bind(this);
   }
@@ -62,27 +62,36 @@ class NewWish extends React.Component {
           underlineColorAndroid={'transparent'}
           onChangeText={(text) => this.setState({
             wish: text,
-            fontFamily: this.state.fontFamily,
-            fontSize: this.state.fontSize,
           })}
           style={
             {
               fontFamily: this.state.fontFamily,
               fontSize: this.state.fontSize,
+              color: this.state.fontColor,
             }
           }
         />
+        <View style={{flexDirection: 'row'}}>
         <Picker
           selectedValue={this.state.fontFamily}
-          style={{ height: 50, width: 100 }}
+          style={{ height: 50, width: 100, flex: 1 }}
           onValueChange={(itemValue, itemIndex) => this.setState({
-            wish: this.state.wish,
             fontFamily: itemValue,
-            fontSize: this.state.fontSize,
         })}>
           <Picker.Item label="Helvetica" value="Helvetica" />
           <Picker.Item label="Optima" value="Optima" />
         </Picker>
+        <Picker
+          selectedValue={this.state.fontColor}
+          style={{flex: 1}}
+          onValueChange={(itemValue, itemIndex) => this.setState({
+            fontColor: itemValue,
+          })}
+        >
+          <Picker.Item color='red' label={'Red'} value={'red'} />
+          <Picker.Item color='black' label={'Black'} value={'black'} />
+        </Picker>
+      </View>
       </View>
   	);
   }
