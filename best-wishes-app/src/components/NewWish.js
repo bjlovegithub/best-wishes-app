@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Picker, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Picker, ImageBackground, Modal, Button } from 'react-native';
 
 import Store from '../store/Store';
 import Common from '../common/Common';
@@ -49,6 +49,7 @@ class NewWish extends React.Component {
     this.state = {
       wish: '', fontFamily: 'Helvetica', fontSize: 20,
       fontColor: 'black', backgroundPic: 'https://images.pexels.com/photos/1562/italian-landscape-mountains-nature.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb',
+      dialogShow: false
     };
 
     this.onChange = this.onChange.bind(this);
@@ -79,18 +80,23 @@ class NewWish extends React.Component {
           }
         />
         <View style={{flexDirection: 'row', flex: 1}}>
+          <View style={{flex: 1}}>
+          <Text style={{textAlign: 'center'}}>Font Style</Text>
           <Picker
             selectedValue={this.state.fontFamily}
-            style={{ height: 50, width: 100, flex: 1 }}
+            itemStyle={{height: 60, fontSize: 12}}
             onValueChange={(itemValue, itemIndex) => this.setState({
               fontFamily: itemValue,
           })}>
             <Picker.Item label="Helvetica" value="Helvetica" />
             <Picker.Item label="Optima" value="Optima" />
           </Picker>
+          </View>
+          <View style={{flex: 1}}>
+          <Text style={{textAlign: 'center'}}>Font Color</Text>
           <Picker
             selectedValue={this.state.fontColor}
-            style={{flex: 1}}
+            itemStyle={{height: 60, fontSize: 12}}
             onValueChange={(itemValue, itemIndex) => this.setState({
               fontColor: itemValue,
             })}
@@ -98,9 +104,12 @@ class NewWish extends React.Component {
             <Picker.Item color='red' label={'Red'} value={'red'} />
             <Picker.Item color='black' label={'Black'} value={'black'} />
           </Picker>
+          </View>
+          <View style={{flex: 1}}>
+          <Text style={{textAlign: 'center'}}>Background</Text>
           <Picker
             selectedValue={this.state.backgroundPic}
-            style={{flex: 1}}
+            itemStyle={{height: 60, fontSize: 12}}
             onValueChange={(itemValue, itemIndex) => this.setState({
               backgroundPic: itemValue,
             })}
@@ -108,8 +117,9 @@ class NewWish extends React.Component {
             <Picker.Item label={'Sea'} value={'https://images.pexels.com/photos/1562/italian-landscape-mountains-nature.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb'} />
             <Picker.Item label={'Sky'} value={'https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb'} />
           </Picker>
+          </View>
         </View>
-        <View style={{flex: 1}}>
+        <View style={{flex: 3}}>
           <ImageBackground
             style={{
               flex: 1,
