@@ -47,18 +47,26 @@ class NewWish extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      wish: '', fontFamily: 'Helvetica', fontSize: 20,
-      fontColor: 'black', backgroundPic: 'https://images.pexels.com/photos/1562/italian-landscape-mountains-nature.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb',
-      dialogShow: false
+      wish: '', fontFamily: 'Helvetica', fontSize: 16,
+      fontColor: 'black', backgroundPic: 'https://images.pexels.com/photos/1562/italian-landscape-mountains-nature.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb'
     };
 
     this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
+    Store.addChangeListener({"type": "mywish_saved", "callback": this.onSaved});
   }
 
-  onChange() {
+  componentWillUnmount() {
+    Store.removeChangeListener({"type": "mywish_saved", "callback": this.onSaved});
+  }
+
+  onSaved() {
+  }
+
+  submit() {
+    Actions.submitWish(this.state);
   }
 
   render() {
@@ -81,19 +89,36 @@ class NewWish extends React.Component {
         />
         <View style={{flexDirection: 'row', flex: 1}}>
           <View style={{flex: 1}}>
-          <Text style={{textAlign: 'center'}}>Font Style</Text>
-          <Picker
-            selectedValue={this.state.fontFamily}
-            itemStyle={{height: 60, fontSize: 12}}
-            onValueChange={(itemValue, itemIndex) => this.setState({
-              fontFamily: itemValue,
-          })}>
-            <Picker.Item label="Helvetica" value="Helvetica" />
-            <Picker.Item label="Optima" value="Optima" />
-          </Picker>
+            <Text style={{textAlign: 'center'}}>Font Style</Text>
+            <Picker
+              selectedValue={this.state.fontFamily}
+              itemStyle={{height: 60, fontSize: 12}}
+              onValueChange={(itemValue, itemIndex) => this.setState({
+                fontFamily: itemValue,
+            })}>
+              <Picker.Item label="Helvetica" value="Helvetica" />
+              <Picker.Item label="Optima" value="Optima" />
+            </Picker>
           </View>
           <View style={{flex: 1}}>
-          <Text style={{textAlign: 'center'}}>Font Color</Text>
+            <Text style={{textAlign: 'center'}}>Font Size</Text>
+            <Picker
+              selectedValue={this.state.fontSize.toString()}
+              itemStyle={{height: 60, fontSize: 12}}
+              onValueChange={(itemValue, itemIndex) => this.setState({
+                fontSize: parseInt(itemValue),
+              })}
+            >
+              <Picker.Item label="12" value="12" />
+              <Picker.Item label="14" value="14" />
+              <Picker.Item label="16" value="16" />
+              <Picker.Item label="18" value="18" />
+              <Picker.Item label="20" value="20" />
+              <Picker.Item label="22" value="22" />
+            </Picker>
+          </View>
+          <View style={{flex: 1}}>
+            <Text style={{textAlign: 'center'}}>Font Color</Text>
           <Picker
             selectedValue={this.state.fontColor}
             itemStyle={{height: 60, fontSize: 12}}
@@ -137,6 +162,13 @@ class NewWish extends React.Component {
             {this.state.wish}
             </Text>
           </ImageBackground>
+        </View>
+        <View style={{flex: 3}}>
+          <Button
+            onPress={onPressLearnMore}
+            title="Say to WORLD"
+            color="#841584"
+          />
         </View>
       </View>
   	);

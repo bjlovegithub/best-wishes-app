@@ -64,6 +64,10 @@ class Menu extends React.Component {
     Actions.loadAuthToken();
   }
 
+  componentWillUnmount() {removeChangeListener
+    AuthStore.removeChangeListener({"type": "auth_event", "callback": this.onChange});
+  }
+
   onChange() {
     this.setState(AuthStore.getAuthInfo());
   }

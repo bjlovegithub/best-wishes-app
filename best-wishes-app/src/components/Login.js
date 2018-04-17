@@ -27,6 +27,10 @@ class Login extends React.Component {
     Actions.loadAuthToken();
   }
 
+  componentWillUnmount() {
+    AuthStore.removeChangeListener({"type": "auth_event", "callback": this.onChange});
+  }
+
   onChange() {
     console.log(AuthStore.getAuthInfo());
     this.setState(AuthStore.getAuthInfo());

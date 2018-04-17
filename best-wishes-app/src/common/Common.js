@@ -8,4 +8,5 @@ module.exports = keyMirror({
   ACT_SAVE_AUTH_TOKEN: null,
   ACT_DELETE_AUTH_TOKEN: null,
   ACT_LOAD_MY_WISH: null,
+  ACT_SUBMIT_MY_WISH: null,
 });

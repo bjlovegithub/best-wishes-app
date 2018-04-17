@@ -20,6 +20,10 @@ class MyWish extends React.Component {
     Actions.loadMyWish();
   }
 
+  componentWillUnmount() {
+    Store.removeChangeListener({"type": "mywish_loaded_event", "callback": this.onChange});
+  }
+
   onChange() {
     this.setState(Store.getMyWish());
   }
