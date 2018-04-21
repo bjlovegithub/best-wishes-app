@@ -7,6 +7,7 @@ import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 
 import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
+import Events from '../common/Events';
 
 class Login extends React.Component {
   constructor(props) {
@@ -22,13 +23,13 @@ class Login extends React.Component {
   componentDidMount() {
     this.setupGoogleSignin();
 
-    AuthStore.addChangeListener({"type": "auth_event", "callback": this.onChange});
+    AuthStore.addChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
 
     Actions.loadAuthToken();
   }
 
   componentWillUnmount() {
-    AuthStore.removeChangeListener({"type": "auth_event", "callback": this.onChange});
+    AuthStore.removeChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
   }
 
   onChange() {

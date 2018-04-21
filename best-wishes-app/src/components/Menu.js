@@ -13,6 +13,7 @@ import {
 
 import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
+import Events from '../common/Events';
 
 const window = Dimensions.get('window');
 const uri = 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png';
@@ -59,13 +60,13 @@ class Menu extends React.Component {
   }
 
   componentDidMount() {
-    AuthStore.addChangeListener({"type": "auth_event", "callback": this.onChange});
+    AuthStore.addChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
 
     Actions.loadAuthToken();
   }
 
   componentWillUnmount() {removeChangeListener
-    AuthStore.removeChangeListener({"type": "auth_event", "callback": this.onChange});
+    AuthStore.removeChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
   }
 
   onChange() {

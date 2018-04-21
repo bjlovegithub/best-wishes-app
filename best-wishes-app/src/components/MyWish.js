@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, Image, ScrollView, ImageBackground } from 'reac
 
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
+import Events from '../common/Events';
 
 class MyWish extends React.Component {
   constructor(props) {
@@ -15,13 +16,13 @@ class MyWish extends React.Component {
   }
 
   componentDidMount() {
-    Store.addChangeListener({"type": "mywish_loaded_event", "callback": this.onChange});
+    Store.addChangeListener({"type": Events.MYWISH_LOADED_EVENT, "callback": this.onChange});
 
     Actions.loadMyWish();
   }
 
   componentWillUnmount() {
-    Store.removeChangeListener({"type": "mywish_loaded_event", "callback": this.onChange});
+    Store.removeChangeListener({"type": Events.MYWISH_LOADED_EVENT, "callback": this.onChange});
   }
 
   onChange() {
