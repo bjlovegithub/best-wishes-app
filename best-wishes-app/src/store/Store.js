@@ -194,6 +194,10 @@ async function submitMyWish(wish) {
         const response = await fetch(
             'http://localhost:9999/submit_my_wish/' , {
                 method: 'PUT',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify(wish),
             }
         );

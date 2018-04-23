@@ -23,14 +23,18 @@ router.get('/wish/:id', function (req, res) {
 });
 
 router.patch('/wish/:id', function (req, res) {
-  console.log(req.params);
-
   res.send({status: 'OK'});
 });
 
 router.get('/my_wish/:id', function (req, res) {
   res.send([{'content': 'test'}, {'content': 'test1'}]);
 });
+
+router.put('/submit_my_wish/', function (req, res) {
+  console.log(req.body);
+  res.send({status: 'OK'});
+});
+
 
 app.use("/", router);
 
