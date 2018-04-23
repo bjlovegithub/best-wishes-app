@@ -23,6 +23,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "apsl-react-native-button": "^3.1.0",
     "es6-promise": "^4.2.4",
     "events": "^1.1.0",
     "expo": "^25.0.0",
