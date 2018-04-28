@@ -28,9 +28,9 @@ router.patch('/wish/:id', function (req, res) {
 
 router.get('/my_wish/:id', function (req, res) {
   res.send([
-    {'content': 'test'}, {'content': 'test1'},
-    {'content': 'test'}, {'content': 'test1'},
-    {'content': 'test'}, {'content': 'test1'}
+    {'wish': 'test'}, {'wish': 'test1'},
+    {'wish': 'test'}, {'wish': 'test1'},
+    {'wish': 'test'}, {'wish': 'test1'}
   ]);
 });
 

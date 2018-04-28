@@ -44,6 +44,7 @@ class ExpandingTextInput extends React.Component {
                   this.props.onContentSizeChange && this.props.onContentSizeChange(event);
               }}
               style={[this.props.style, { height: Math.max(35, this.state.height) }]}
+              value={this.props.wishText}
               />
         );
     }
@@ -101,9 +102,13 @@ class NewWish extends React.Component {
     }
 
     render() {
+        const wishForUpdate = Store.getMyWishForUpdate();
+        const wishText = wishForUpdate === undefined ? '' : wishForUpdate.wish;
+        
         return (
             <View style={{flexDirection: 'column', flex: 1}}>
               <ExpandingTextInput
+                 wishText={wishText}
                  maxLength={1024}
                  underlineColorAndroid={'transparent'}
                  onChangeText={(text) => this.setState({

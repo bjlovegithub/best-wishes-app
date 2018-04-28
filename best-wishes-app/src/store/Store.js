@@ -19,6 +19,9 @@ var myWish = [];
 
 var submitSuccessful = true;
 
+// for update my wish.
+var myWishForUpdate = undefined;
+
 // internal storage
 var storage = new Storage({
     size: 1000,
@@ -107,6 +110,14 @@ var Store = assign({}, EventEmitter.prototype, {
 
     getMyWish() {
         return {'wish': myWish};
+    },
+
+    setMyWishForUpdate(wish) {
+        myWishForUpdate = wish;
+    },
+
+    getMyWishForUpdate(wish) {
+        return myWishForUpdate;
     },
 
     emitChange(eventType) {

@@ -33,7 +33,8 @@ class MyWish extends React.Component {
     }
 
     handleUpdate(idx) {
-        console.log("udpate: " + idx);
+        Store.setMyWishForUpdate(this.state.wish[idx]);
+        this.props.navigation.navigate('NewWish');
     }
 
     makeSwipeButton(idx) {
@@ -69,7 +70,7 @@ class MyWish extends React.Component {
                        }}
                        source={{ uri: 'https://images.pexels.com/photos/17679/pexels-photo.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb' }}>
                       <View style={{flex: 1}}>
-                        <Text>{ this.state.wish[i].content }</Text>
+                        <Text>{ this.state.wish[i].wish }</Text>
                       </View>
                     </ImageBackground>
   			          </View>
