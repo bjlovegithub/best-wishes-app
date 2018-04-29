@@ -28,17 +28,20 @@ router.patch('/wish/:id', function (req, res) {
 
 router.get('/my_wish/:id', function (req, res) {
   res.send([
-    {'wish': 'test'}, {'wish': 'test1'},
-    {'wish': 'test'}, {'wish': 'test1'},
-    {'wish': 'test'}, {'wish': 'test1'}
+    {'wish': 'test1', id: '1'}, {'wish': 'test2', id: '2'},
+    {'wish': 'test3', id: '3'}, {'wish': 'test4', id: '4'},
+    {'wish': 'test5', id: '5'}, {'wish': 'test6', id: '6'}
   ]);
 });
 
-router.put('/submit_my_wish/', function (req, res) {
+router.put('/my_wish/', function (req, res) {
   console.log(req.body);
   res.send({status: 'OK'});
 });
 
+router.delete('/my_wish/:id', function (req, res) {
+  res.send({status: 'OK'});  
+});
 
 app.use("/", router);
 
