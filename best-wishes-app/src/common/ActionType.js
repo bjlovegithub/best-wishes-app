@@ -3,6 +3,7 @@
 import keyMirror from 'keymirror';
 
 module.exports = keyMirror({
+  ACT_FETCH_BOARD_WISH: null,
   ACT_THUMB_UP: null,
   ACT_LOAD_AUTH_TOKEN: null,
   ACT_SAVE_AUTH_TOKEN: null,

@@ -36,6 +36,21 @@ var storage = new Storage({
 
 var Store = assign({}, EventEmitter.prototype, {
 
+  fetchBoardWish() {
+    fetchBoardWish();
+  },
+
+  getBoardWish() {
+    const arr = [];
+    for (var prop in wishMap) {
+      if (wishMap.hasOwnProperty(prop)) {
+        arr.push(wishMap[prop]);
+      }
+    }    
+
+    return arr;
+  },
+
   fetchWish(id) {
     if (wishMap[id] === undefined) {
       getData(id);
@@ -137,6 +152,28 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 });
 
+async function fetchBoardWish() {
+  try {
+    const response = await fetch(
+      'http://localhost:9999/board_wish/', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+    const data = await response.json();
+    data.forEach(w => {
+      wishMap[w.id] = w;
+    });
+
+    Store.emitChange(Events.BOARD_WISH_EVENT);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function getData(id) {
   try {
     const response = await fetch(
@@ -159,8 +196,6 @@ async function getData(id) {
 
 async function updateThumbs(id) {
   try {
-    const sid = wishMap[id].sid;
-
     const response = await fetch(
       'http://localhost:9999/wish/' + id, {
         method: 'PATCH',
@@ -168,13 +203,13 @@ async function updateThumbs(id) {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'sid': sid, 'thumbs': wishMap[id].thumbs })
+        body: JSON.stringify(wishMap[id])
       }
     );
     await response.json();
 
     if (response.ok) {
-      Store.emitChange(Events.WISH_EVENT);
+      Store.emitChange(Events.THUMB_UP_EVENT);
     }
     else {
       console.log("Update thumbs failed: "+sid);
@@ -249,6 +284,9 @@ async function deleteMyWish(wish) {
 
 ActionDispatcher.register(function(action) {
   switch (action.type) {
+  case ActionType.ACT_FETCH_BOARD_WISH:
+    Store.fetchBoardWish();
+    break;
   case ActionType.ACT_THUMB_UP:
     const wishId = action.wishId;
     if (wishMap[wishId] === undefined) {

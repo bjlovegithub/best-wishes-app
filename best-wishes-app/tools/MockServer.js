@@ -9,6 +9,43 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const router = express.Router();
 
+router.get('/board_wish/', function (req, res) {
+  const arr = [
+    {
+      id: '1',
+      userEmail: 'abc@abc.com',
+      wish: 'this is my wish 1',
+      fontFamily: 'Helvetica',
+      fontSize: 16,
+      fontColor: 'black',
+      backgroundPic: 'https://images.pexels.com/photos/17679/pexels-photo.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb',
+      thumbs: 1,
+    },
+    {
+      id: '2',
+      userEmail: 'abc@abc.com',
+      wish: 'this is my wish 2',
+      fontFamily: 'Helvetica',
+      fontSize: 16,
+      fontColor: 'black',
+      backgroundPic: 'https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb',
+      thumbs: 2,
+    },
+    {
+      id: '3',
+      userEmail: 'abc@abc.com',
+      wish: 'this is my wish 3',
+      fontFamily: 'Helvetica',
+      fontSize: 16,
+      fontColor: 'black',
+      backgroundPic: 'https://images.pexels.com/photos/1562/italian-landscape-mountains-nature.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb',
+      thumbs: 3,
+    },
+  ];
+  
+	res.send(arr);
+});
+
 router.get('/wish/:id', function (req, res) {
   const id = req.params.id;
   if (id === "1") {

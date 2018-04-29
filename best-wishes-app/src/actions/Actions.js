@@ -5,6 +5,12 @@ import ActionType from '../common/ActionType';
 
 var Actions = {
 
+  fetchBoardWish: function() {
+    ActionDispatcher.dispatch({
+      type: ActionType.ACT_FETCH_BOARD_WISH,
+    });
+  },
+
   thumbUp: function(wishId) {
     ActionDispatcher.dispatch({
       type: ActionType.ACT_THUMB_UP,

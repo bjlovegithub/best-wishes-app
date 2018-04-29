@@ -1,7 +1,10 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground } from 'react-native';
+import {
+  StyleSheet, Text, View, Image, ScrollView,
+  ImageBackground, Alert,
+} from 'react-native';
 
 import Swipeout from 'react-native-swipeout';
 
@@ -40,7 +43,14 @@ class MyWish extends React.Component {
   }
 
   handleDelete(idx) {
-    Actions.deleteMyWish(this.state.wish[idx]);
+    Alert.alert(
+      'Caution',
+      'Are sure to delete this wish :(',
+      [
+        {text: 'Sure', onPress: () => Actions.deleteMyWish(this.state.wish[idx])},
+        {text: 'Dismiss', onPress: () => undefined},
+      ],
+    );
   }
 
   makeSwipeButton(idx) {
@@ -63,7 +73,6 @@ class MyWish extends React.Component {
   }
 
   render() {
-    console.log("render...");
     var wishArr = [];
 
   	for(let i = 0; i < this.state.wish.length; i++) {
