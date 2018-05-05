@@ -1,7 +1,9 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet, Text, View, Image, TouchableOpacity,
+} from 'react-native';
 
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
@@ -34,29 +36,52 @@ class Wish extends React.Component {
     this.setState(Store.getWish(this.state.id));
   }
 
+  getDate(timestamp) {
+    var date = new Date(timestamp * 1000);
+    var hours = date.getFullYear();
+    var minutes = "0" + (date.getMonth() + 1);
+    var seconds = "0" + date.getDate();
+    return hours + '-' + minutes.substr(-2) + '-' + seconds.substr(-2);
+  }
+
   handleClick() {
     Actions.thumbUp(this.state.id);
   }
 
   render() {
+    const { wish, fontFamily, fontSize, fontColor, thumbs, createdTimestamp } = this.state;
+    console.log(createdTimestamp);
+    const fontStyle = {
+      fontSize: fontSize, color: fontColor,
+      fontFamily: fontFamily,       
+    };
     return (
 	    <View style={{flexDirection: 'column', flex: 1}}>
-        <Text style={{fontSize: 20, fontWeight: 'bold', color: 'blue', flex: 6}}>
-          {this.state.wish}
-        </Text>
+        <View style={{ flex: 6, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={fontStyle}>
+            {this.state.wish}
+          </Text>
+        </View>
         <View style={{
                 flex: 1, flexDirection: 'row', justifyContent: 'center',
                 alignItems: 'center', backgroundColor: 'white', marginBottom: 0
               }}>
-          <TouchableOpacity onPress={this.handleClick}>
-            <Image
-               style={{ width: 20, height: 20 }}
-               source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
-               />
-          </TouchableOpacity>
- 		      <Text>
-            {this.state.thumbs}
-          </Text>
+          <View style={{ flex : 1, flexDirection: 'row' }}>
+            <TouchableOpacity onPress={this.handleClick} style={{ flex : 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+              <Image
+                 style={{ width: 20, height: 20 }}
+                 source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
+                 />
+            </TouchableOpacity>
+ 		        <Text style={{ flex : 1, justifyContent: 'flex-start', alignItems: 'center' }}>
+              {thumbs}
+            </Text>
+          </View>
+          <View style={{ flex : 1}}>
+            <Text>
+              {this.getDate(createdTimestamp)}
+            </Text>
+          </View>
         </View>
       </View>
     );
