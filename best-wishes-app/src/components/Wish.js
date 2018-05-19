@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-  StyleSheet, Text, View, Image, TouchableOpacity,
+  StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground
 } from 'react-native';
 
 import Store from '../store/Store';
@@ -62,27 +62,30 @@ class Wish extends React.Component {
             {this.state.wish}
           </Text>
         </View>
-        <View style={{
-                flex: 1, flexDirection: 'row', justifyContent: 'center',
-                alignItems: 'center', backgroundColor: 'white', marginBottom: 0
-              }}>
-          <View style={{ flex : 1, flexDirection: 'row' }}>
-            <TouchableOpacity onPress={this.handleClick} style={{ flex : 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+        <ImageBackground
+           style={{
+             flex: 1, flexDirection: 'row',
+             alignItems: 'center', backgroundColor: 'white', marginBottom: 0
+           }}
+           source={require('../../assets/botton_background.jpg')}
+           >
+          <View style={{ flex : 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', borderRadius: 10 }}>
+            <TouchableOpacity onPress={this.handleClick} style={{ flex : 1, alignItems: 'flex-end' }}>
               <Image
                  style={{ width: 20, height: 20 }}
                  source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
                  />
             </TouchableOpacity>
- 		        <Text style={{ flex : 1, justifyContent: 'flex-start', alignItems: 'center' }}>
+ 		        <Text style={{ flex : 1, alignItems: 'flex-start', fontWeight: 'bold' }}>
               {thumbs}
             </Text>
           </View>
           <View style={{ flex : 1}}>
-            <Text>
+            <Text style={{ fontWeight: 'bold' }}>
               {this.getDate(createdTimestamp)}
             </Text>
           </View>
-        </View>
+        </ImageBackground>
       </View>
     );
   }
