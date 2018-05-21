@@ -1,13 +1,17 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-
-import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+import {
+  StyleSheet, Text, View, Image,
+  Button, TouchableOpacity
+} from 'react-native';
+import Expo from 'expo';
 
 import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
+
+const IOS_CLIENT_ID = '241139739568-oqrrk998b60tc8d0b3e4bhjnf4bms0qh.apps.googleusercontent.com';
 
 class Login extends React.Component {
   constructor(props) {
@@ -21,8 +25,6 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
-    this.setupGoogleSignin();
-
     AuthStore.addChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
 
     Actions.loadAuthToken();
@@ -37,37 +39,25 @@ class Login extends React.Component {
     this.setState(AuthStore.getAuthInfo());
   }
 
-  googleSignIn() {
-    GoogleSignin.signIn()
-      .then((user) => {
-        Actions.saveAuthToken(user, "google-auth-token");
-      })
-      .catch((err) => {
-        console.log('WRONG SIGNIN', err);
-      })
-      .done();
+  async googleSignIn() {
+    try {
+      const result = await Expo.Google.logInAsync({
+        iosClientId: IOS_CLIENT_ID,
+        scopes: ['profile', 'email'],
+      });
+
+      if (result.type === 'success') {
+        Actions.saveAuthToken(result, "google-auth-token");
+      } else {
+        console.log('Google login failed.');
+      }
+    } catch(e) {
+      console.log('Google login failed: ' + e);
+    }
   }
 
   googleSignOut() {
-    GoogleSignin.revokeAccess().then(() => GoogleSignin.signOut()).then(() => {
-      Actions.deleteAuthToken("google-auth-token");
-    })
-    .done();
-  }
-
-  async setupGoogleSignin() {
-    try {
-      await GoogleSignin.hasPlayServices({ autoResolve: true });
-      await GoogleSignin.configure({
-        iosClientId: '241139739568-oqrrk998b60tc8d0b3e4bhjnf4bms0qh.apps.googleusercontent.com',
-        offlineAccess: false
-      });
-
-      const user = await GoogleSignin.currentUserAsync();
-    }
-    catch (err) {
-      console.log("Google signin error", err.code, err.message);
-    }
+    // TODO
   }
 
   render() {
@@ -89,11 +79,12 @@ class Login extends React.Component {
     else {
       return (
         <View>
-          <GoogleSigninButton
-            style={{width: 212, height: 48}}
-            size={GoogleSigninButton.Size.Standard}
-            color={GoogleSigninButton.Color.Auto}
-            onPress={this.googleSignIn.bind(this)}/>
+          <Button
+             onPress={this.googleSignIn}
+             title="Learn More"
+             color="#841584"
+             accessibilityLabel="Learn more about this purple button"
+             />
         </View>
       );
     }

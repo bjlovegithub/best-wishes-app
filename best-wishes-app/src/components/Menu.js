@@ -9,7 +9,9 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
+import { List, ListItem } from "react-native-elements";
 
 import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
@@ -23,8 +25,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: window.width,
     height: window.height,
-    backgroundColor: 'white',
-    padding: 20,
+    backgroundColor: '#ECEFF0',
+    padding: 6,
   },
   avatarContainer: {
     marginBottom: 20,
@@ -37,14 +39,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   name: {
-    position: 'absolute',
-    left: 70,
-    top: 20,
+    fontFamily: 'Cochin',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   item: {
     fontSize: 14,
     fontWeight: '300',
-    paddingTop: 5,
+    paddingTop: 15,
+    textDecorationLine: 'underline',
   },
 });
 
@@ -52,7 +55,21 @@ class Menu extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {isLogin: false, picUrl: uri, name: "Happy ;)"};
+    this.state = {
+      isLogin: false, picUrl: uri, name: "Happy ;)",
+      items: [
+        {
+          name: 'My Wishes',
+          sub_title: 'List and Update My Wishes',
+          pic: require('../../assets/new_wish_icon.png'),
+        },
+        {
+          name: 'New Wish',
+          sub_title: 'Create A New Wish',
+          pic: require('../../assets/new_wish_icon.png'),
+        },
+      ],
+    };
 
     this.onItemSelected = this.onItemSelected.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -101,9 +118,20 @@ class Menu extends React.Component {
               source={{uri: this.state.picUrl}}
             />
           </TouchableOpacity>
-          <Text style={styles.name}>{this.state.name}</Text>
         </View>
+        <Text style={styles.name}>{this.state.name}</Text>
 
+        <FlatList
+           data={this.state.items}
+           renderItem={
+               ({ item }) => (
+                 <ListItem
+                    roundAvatar
+                    subtitle={ item.sub_title }
+                    avatar={ item.pic }/>
+               )
+             }/>
+        
         <Text
           onPress={() => this.onItemSelected('My Wishes')}
           style={styles.item}
