@@ -69,8 +69,9 @@ var Store = assign({}, EventEmitter.prototype, {
     });
 
     auth = {
-      isLogin: true, picUrl: tokenInfo.photo,
-      name: tokenInfo.name, user_id: tokenInfo.id
+      isLogin: true, picUrl: tokenInfo.user.photoUrl,
+      name: tokenInfo.user.name, user_email: tokenInfo.user.email,
+      token: tokenInfo.accessToken
     };
 
     this.emitChange(Events.AUTH_EVENT);
@@ -83,7 +84,10 @@ var Store = assign({}, EventEmitter.prototype, {
       autoSync: true,
       syncInBackground: true,
     }).then(ret => {
-      auth = {isLogin: true, picUrl: ret.photo, name: ret.name};
+      auth = {
+        isLogin: true, picUrl: ret.user.photoUrl,
+        name: ret.user.name, token: ret.accessToken
+      };
       this.emitChange(Events.AUTH_EVENT);
     }).catch(err => {
       console.warn(err.message);
@@ -102,7 +106,9 @@ var Store = assign({}, EventEmitter.prototype, {
       id: ''
     });
 
-    auth = {isLogin: false};
+    auth = {
+      isLogin: false
+    };
 
     this.emitChange(Events.AUTH_EVENT);
   },

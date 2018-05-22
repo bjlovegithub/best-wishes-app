@@ -53,7 +53,9 @@ class Board extends React.Component {
            }}
            source={{
              uri: wishes[i].backgroundPic
-           }}>
+           }}
+           key={{i}}
+           >
           <Wish wish={wishes[i]} style={styles.wish} />
         </ImageBackground>
       );

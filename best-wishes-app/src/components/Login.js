@@ -10,8 +10,9 @@ import Expo from 'expo';
 import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
+import { GOOGLE_IOS_CLIENT_ID } from '../common/Constants';
 
-const IOS_CLIENT_ID = '241139739568-oqrrk998b60tc8d0b3e4bhjnf4bms0qh.apps.googleusercontent.com';
+const GOOGLE_SIGNIN_ICON = require('../../assets/btn_google_signin.png');
 
 class Login extends React.Component {
   constructor(props) {
@@ -35,14 +36,14 @@ class Login extends React.Component {
   }
 
   onChange() {
-    console.log(AuthStore.getAuthInfo());
     this.setState(AuthStore.getAuthInfo());
   }
 
   async googleSignIn() {
+    console.log(GOOGLE_IOS_CLIENT_ID);
     try {
       const result = await Expo.Google.logInAsync({
-        iosClientId: IOS_CLIENT_ID,
+        iosClientId: GOOGLE_IOS_CLIENT_ID,
         scopes: ['profile', 'email'],
       });
 
@@ -56,8 +57,8 @@ class Login extends React.Component {
     }
   }
 
-  googleSignOut() {
-    // TODO
+  async googleSignOut() {
+    Actions.deleteAuthToken("google-auth-token");
   }
 
   render() {
@@ -79,12 +80,12 @@ class Login extends React.Component {
     else {
       return (
         <View>
-          <Button
-             onPress={this.googleSignIn}
-             title="Learn More"
-             color="#841584"
-             accessibilityLabel="Learn more about this purple button"
-             />
+          <TouchableOpacity onPress={this.googleSignIn}>
+            <Image
+               source={GOOGLE_SIGNIN_ICON}
+               style={{height: 50, resizeMode: 'contain'}}
+               />
+          </TouchableOpacity>
         </View>
       );
     }

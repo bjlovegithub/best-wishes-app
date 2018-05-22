@@ -19,6 +19,7 @@ import Events from '../common/Events';
 
 const window = Dimensions.get('window');
 const uri = 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png';
+const DEFAULT_NAME = 'Happy :)';
 
 const styles = StyleSheet.create({
   menu: {
@@ -56,7 +57,7 @@ class Menu extends React.Component {
     super(props);
 
     this.state = {
-      isLogin: false, picUrl: uri, name: "Happy ;)",
+      isLogin: false, picUrl: uri, name: DEFAULT_NAME,
       items: [
         {
           name: 'My Wishes',
@@ -82,12 +83,18 @@ class Menu extends React.Component {
     Actions.loadAuthToken();
   }
 
-  componentWillUnmount() {removeChangeListener
+  componentWillUnmount() {
     AuthStore.removeChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
   }
 
   onChange() {
-    this.setState(AuthStore.getAuthInfo());
+    const auth = AuthStore.getAuthInfo();
+    if (auth.isLogin === true) {
+      this.setState(AuthStore.getAuthInfo());
+    }
+    else {
+      this.setState({isLogin: false, picUrl: uri, name: DEFAULT_NAME});
+    }
   }
 
   onItemSelected(sig) {
@@ -128,7 +135,8 @@ class Menu extends React.Component {
                  <ListItem
                     roundAvatar
                     subtitle={ item.sub_title }
-                    avatar={ item.pic }/>
+                    avatar={ item.pic }
+                    />
                )
              }/>
         
