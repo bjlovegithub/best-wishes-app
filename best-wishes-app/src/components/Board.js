@@ -44,21 +44,23 @@ class Board extends React.Component {
   render() {
     var arr = [];
     const { wishes } = this.state;
-    for (let i = 0; i < wishes.length; ++i) {
-      arr.push(
-        <ImageBackground
-           style={{
-             flex: 1,
-             justifyContent: 'center'
-           }}
-           source={{
-             uri: wishes[i].backgroundPic
-           }}
-           key={{i}}
-           >
-          <Wish wish={wishes[i]} style={styles.wish} />
-        </ImageBackground>
-      );
+    for (var prop in wishes) {
+      if (wishes.hasOwnProperty(prop)) {
+        arr.push(
+          <ImageBackground
+             style={{
+               flex: 1,
+               justifyContent: 'center'
+             }}
+             source={{
+               uri: wishes[prop].backgroundPic
+             }}
+             key={prop}
+             >
+            <Wish wish={wishes[prop]} style={styles.wish} />
+          </ImageBackground>
+        );
+      }
     }
     
     return (

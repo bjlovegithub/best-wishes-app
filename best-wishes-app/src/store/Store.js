@@ -41,6 +41,7 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   getBoardWish() {
+    return wishMap;
     const arr = [];
     for (var prop in wishMap) {
       if (wishMap.hasOwnProperty(prop)) {
@@ -171,6 +172,7 @@ async function fetchBoardWish() {
     );
     const data = await response.json();
     data.forEach(w => {
+      w.key = w.id;
       wishMap[w.id] = w;
     });
 
