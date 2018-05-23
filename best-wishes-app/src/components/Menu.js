@@ -63,11 +63,13 @@ class Menu extends React.Component {
           name: 'My Wishes',
           sub_title: 'List and Update My Wishes',
           pic: require('../../assets/new_wish_icon.png'),
+          action: () => { this.onItemSelected('My Wishes'); }
         },
         {
           name: 'New Wish',
           sub_title: 'Create A New Wish',
           pic: require('../../assets/new_wish_icon.png'),
+          action: () => { this.onItemSelected('New Wish'); }
         },
       ],
     };
@@ -128,30 +130,18 @@ class Menu extends React.Component {
         </View>
         <Text style={styles.name}>{this.state.name}</Text>
 
-        <FlatList
-           data={this.state.items}
-           keyExtractor={(item, index) => index }
-           renderItem={ ({ item }) => (
-             <ListItem
-                roundAvatar
-                subtitle={ item.sub_title }
-                avatar={ item.pic } />
-           )}
-        />
-        
-        <Text
-          onPress={() => this.onItemSelected('My Wishes')}
-          style={styles.item}
-        >
-          My Wishes
-        </Text>
-
-        <Text
-          onPress={() => this.onItemSelected('New Wish')}
-          style={styles.item}
-        >
-          New Wish
-        </Text>
+        <View style={{marginTop: 30}}>
+          <FlatList
+             data={this.state.items}
+             keyExtractor={(item, index) => index }
+             renderItem={ ({ item }) => (
+               <ListItem
+                 roundAvatar
+                 subtitle={ item.name }
+                 onPress={ item.action }
+                 avatar={ item.pic } />
+            )}/>
+        </View>
       </ScrollView>
     );
   }
