@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 
 import SideMenu from 'react-native-side-menu';
 
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import Board from './src/components/Board';
 import Login from './src/components/Login';
@@ -11,7 +11,7 @@ import MyWish from './src/components/MyWish';
 import NewWish from './src/components/NewWish';
 import HomeScreen from './src/components/Home';
 
-export default StackNavigator(
+const RootStack = createStackNavigator(
   {
     Login: {
       screen: Login,
@@ -46,3 +46,9 @@ export default StackNavigator(
     initialRouteName: 'Home',
   }
 );
+
+export default class App extends React.Component {
+  render() {
+    return <RootStack />;
+  }
+}

@@ -130,15 +130,14 @@ class Menu extends React.Component {
 
         <FlatList
            data={this.state.items}
-           renderItem={
-               ({ item }) => (
-                 <ListItem
-                    roundAvatar
-                    subtitle={ item.sub_title }
-                    avatar={ item.pic }
-                    />
-               )
-             }/>
+           keyExtractor={(item, index) => index }
+           renderItem={ ({ item }) => (
+             <ListItem
+                roundAvatar
+                subtitle={ item.sub_title }
+                avatar={ item.pic } />
+           )}
+        />
         
         <Text
           onPress={() => this.onItemSelected('My Wishes')}
