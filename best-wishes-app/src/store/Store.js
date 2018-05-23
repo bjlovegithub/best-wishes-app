@@ -91,12 +91,13 @@ var Store = assign({}, EventEmitter.prototype, {
       };
       this.emitChange(Events.AUTH_EVENT);
     }).catch(err => {
-      console.warn(err.message);
       switch (err.name) {
       case 'NotFoundError':
         break;
       case 'ExpiredError':
         break;
+      default:
+        console.warn(err.message);
       }
     });
   },

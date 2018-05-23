@@ -3,9 +3,10 @@
 import React from 'react';
 import {
   StyleSheet, Text, View, Image,
-  Button, TouchableOpacity
+  TouchableOpacity
 } from 'react-native';
 import Expo from 'expo';
+import { Button } from 'react-native-elements';
 
 import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
@@ -64,22 +65,24 @@ class Login extends React.Component {
   render() {
     if (this.state.isLogin) {
       return (
-        <View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Image
-            style={{ width: 80, height: 80 }}
-            source={{uri: this.state.picUrl}}
-          />
-          <TouchableOpacity onPress={() => {this.googleSignOut(); }}>
-            <View style={{marginTop: 50}}>
-              <Text>Log out</Text>
-            </View>
-          </TouchableOpacity>
+             style={{ width: 80, height: 80, borderRadius: 24 }}
+             source={{ uri: this.state.picUrl }} />
+          <View style={{marginTop: 30}}>
+            <Button
+               borderRadius= { 6 }
+               backgroundColor = '#4054B2'
+               onPress={ this.googleSignOut }
+               fontSize= { 14 }
+               title='Logout' />
+          </View>
         </View>
       );
     }
     else {
       return (
-        <View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <TouchableOpacity onPress={this.googleSignIn}>
             <Image
                source={GOOGLE_SIGNIN_ICON}
