@@ -3,7 +3,7 @@
 import React from 'react';
 import {
   StyleSheet, Text, View, Image, ScrollView,
-  ImageBackground, Alert,
+  ImageBackground, Alert, RefreshControl
 } from 'react-native';
 
 import Swipeout from 'react-native-swipeout';
@@ -11,14 +11,16 @@ import Swipeout from 'react-native-swipeout';
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
+import {getDate} from '../common/Util';
 
 class MyWish extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {wish: []};
+    this.state = {wish: [], refreshing: false};
 
     this.onChange = this.onChange.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleRefresh = this.handleRefresh.bind(this);
   }
 
   componentDidMount() {
@@ -33,8 +35,13 @@ class MyWish extends React.Component {
     Store.removeChangeListener({"type": Events.MYWISH_DELETED_EVENT, "callback": this.onChange});
   }
 
+  handleRefresh() {
+    this.setState({refreshing: true});
+    Actions.loadMyWish();
+  }
+
   onChange() {
-    this.setState({wish: Store.getMyWish().wish});
+    this.setState({wish: Store.getMyWish().wish, refreshing: false});
   }
 
   handleUpdate(idx) {
@@ -64,7 +71,7 @@ class MyWish extends React.Component {
       {
         text: 'Delete',
         backgroundColor: '#ff0000',
-        onPress: () => this.handleDelete(idx),        
+        onPress: () => this.handleDelete(idx),
         idx: idx,
       }
     ];
@@ -73,9 +80,16 @@ class MyWish extends React.Component {
   }
 
   render() {
+    const { wish } = this.state;
+    
     var wishArr = [];
 
-  	for(let i = 0; i < this.state.wish.length; i++) {
+  	for(let i = 0; i < wish.length; i++) {
+      const fontStyle = {
+        fontFamily: wish[i].fontFamily,
+        color: wish[i].fontColor,
+        fontSize: wish[i].fontSize
+      };
   		wishArr.push(
         <Swipeout key = {i} right={this.makeSwipeButton(i)} autoClose={true}>
   			  <View style = {{flex:1}}>
@@ -85,9 +99,10 @@ class MyWish extends React.Component {
                  justifyContent: 'center',
                  height: 200,
                }}
-               source={{ uri: 'https://images.pexels.com/photos/17679/pexels-photo.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb' }}>
-              <View style={{flex: 1}}>
-                <Text>{ this.state.wish[i].wish }</Text>
+               source={{ uri: wish[i].backgroundPic }}>
+              <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={fontStyle}>{ wish[i].wish }</Text>
+                <Text style={{ fontFamily: 'HoeflerText-Italic', fontSize: 20 }}>{ getDate(wish[i].createdTimestamp) }</Text>
               </View>
             </ImageBackground>
   			  </View>
@@ -95,10 +110,12 @@ class MyWish extends React.Component {
   		);
   	}
 
+    const refresh = <RefreshControl onRefresh={this.handleRefresh} refreshing={this.state.refreshing} />;
+
   	return (
   		<View style={{flex: 1}} contentContainerStyle={{flex: 1}}>
-        <ScrollView>
-  			  { wishArr }
+        <ScrollView refreshControl={refresh}>
+          { wishArr }
         </ScrollView>
   		</View>
   	);

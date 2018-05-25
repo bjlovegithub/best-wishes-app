@@ -15,41 +15,6 @@ import Actions from '../actions/Actions';
 
 const ASSETS_PREFIX = '../../assets/';
 
-// Reference from https://reactnative.fun/2017/06/21/expanding-textinput/
-class ExpandingTextInput extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      height: 0
-    };
-  }
-
-  focus () {
-    this.textInput && this.textInput.focus();
-  }
-
-  render () {
-    return (
-      <TextInput
-         {...this.props}
-         ref={(view) => (this.textInput = view)}
-        multiline
-        autoFocus={true}
-        onContentSizeChange={(event) => {
-          if (event && event.nativeEvent && event.nativeEvent.contentSize) {
-            this.setState({
-              height: event.nativeEvent.contentSize.height
-            });
-          }
-          this.props.onContentSizeChange && this.props.onContentSizeChange(event);
-        }}
-        style={[this.props.style, { height: Math.max(35, this.state.height) }]}
-        value={this.props.wishText}
-        />
-    );
-  }
-}
-
 class NewWish extends React.Component {
   constructor(props) {
     super(props);
@@ -63,14 +28,14 @@ class NewWish extends React.Component {
 
   componentDidMount() {
     Store.addChangeListener({
-      "type": Events.MYWISH_SAVED_EVENT,
-      "callback": this.onSaved
+      'type': Events.MYWISH_SAVED_EVENT,
+      'callback': this.onSaved
     });
   }
 
   componentWillUnmount() {
     Store.removeChangeListener({
-      "type": Events.MYWISH_SAVED_EVENT, "callback": this.onSaved
+      'type': Events.MYWISH_SAVED_EVENT, 'callback': this.onSaved
     });
   }
 
@@ -107,13 +72,14 @@ class NewWish extends React.Component {
     
     return (
       <View style={{flexDirection: 'column', flex: 1}}>
-        <ExpandingTextInput
-           wishText={wishText}
-           maxLength={1024}
-           underlineColorAndroid={'transparent'}
-           onChangeText={(text) => this.setState({
-             wish: text,
-          })}
+        <TextInput
+           multiline
+           onChangeText={(text) => {
+             this.setState({
+               wish: text,
+             });
+            }
+          }
           style={
             {
               fontFamily: this.state.fontFamily,
@@ -132,8 +98,13 @@ class NewWish extends React.Component {
                  onValueChange={(itemValue, itemIndex) => this.setState({
                    fontFamily: itemValue,
                 })}>
-                <Picker.Item label="Helvetica" value="Helvetica" />
-                <Picker.Item label="Optima" value="Optima" />
+                <Picker.Item label='Helvetica' value='Helvetica' />
+                <Picker.Item label='Papyrus' value='Papyrus-Condensed' />
+                <Picker.Item label='Savoye' value='SavoyeLetPlain' />
+                <Picker.Item label='Snell' value='SnellRoundhand' />
+                <Picker.Item label='TimesNewRoman' value='TimesNewRomanPSMT' />
+                <Picker.Item label='Copperplate' value='Copperplate' />
+                <Picker.Item label='Bradley' value='BradleyHandITCTT-Bold' />
               </Picker>
             </View>
             <View style={{flex: 1}}>
@@ -145,12 +116,12 @@ class NewWish extends React.Component {
                    fontSize: parseInt(itemValue),
                 })}
                 >
-                <Picker.Item label="12" value="12" />
-                <Picker.Item label="14" value="14" />
-                <Picker.Item label="16" value="16" />
-                <Picker.Item label="18" value="18" />
-                <Picker.Item label="20" value="20" />
-                <Picker.Item label="22" value="22" />
+                <Picker.Item label='12' value='12' />
+                <Picker.Item label='14' value='14' />
+                <Picker.Item label='16' value='16' />
+                <Picker.Item label='18' value='18' />
+                <Picker.Item label='20' value='20' />
+                <Picker.Item label='22' value='22' />
               </Picker>
             </View>
             <View style={{flex: 1}}>
@@ -188,15 +159,16 @@ class NewWish extends React.Component {
                }}
                source={{ uri: this.state.backgroundPic}}
                >
-              <Text style={
-                      {
-                        fontFamily: this.state.fontFamily,
-                        fontSize: this.state.fontSize,
-                        color: this.state.fontColor,
-                      }
-                    }>
-                {this.state.wish}
-              </Text>
+              <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                <Text
+                   style={{
+                     fontFamily: this.state.fontFamily,
+                     fontSize: this.state.fontSize,
+                     color: this.state.fontColor,
+                   }}>
+                  {this.state.wish}
+                </Text>
+              </View>
             </ImageBackground>
           </View>
           <View style={{flex: 0.6, padding: 20, flexDirection: 'row'}}>

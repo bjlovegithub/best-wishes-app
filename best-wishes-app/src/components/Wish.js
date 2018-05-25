@@ -8,6 +8,7 @@ import {
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
+import {getDate} from '../common/Util';
 
 class Wish extends React.Component {
   constructor(props) {
@@ -36,21 +37,12 @@ class Wish extends React.Component {
     this.setState(Store.getWish(this.state.id));
   }
 
-  getDate(timestamp) {
-    var date = new Date(timestamp * 1000);
-    var hours = date.getFullYear();
-    var minutes = "0" + (date.getMonth() + 1);
-    var seconds = "0" + date.getDate();
-    return hours + '-' + minutes.substr(-2) + '-' + seconds.substr(-2);
-  }
-
   handleClick() {
     Actions.thumbUp(this.state.id);
   }
 
   render() {
     const { wish, fontFamily, fontSize, fontColor, thumbs, createdTimestamp } = this.state;
-    console.log(createdTimestamp);
     const fontStyle = {
       fontSize: fontSize, color: fontColor,
       fontFamily: fontFamily,       
@@ -82,7 +74,7 @@ class Wish extends React.Component {
           </View>
           <View style={{ flex : 1}}>
             <Text style={{ fontFamily: 'HoeflerText-Italic', fontSize: 20 }}>
-              {this.getDate(createdTimestamp)}
+              {getDate(createdTimestamp)}
             </Text>
           </View>
         </ImageBackground>

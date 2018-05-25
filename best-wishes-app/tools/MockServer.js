@@ -69,11 +69,80 @@ router.patch('/wish/:id', function (req, res) {
   res.send({status: 'OK'});
 });
 
-router.get('/my_wish/:id', function (req, res) {
+router.get('/my_wish/:user_id', function (req, res) {
   res.send([
-    {'wish': 'test1', id: '1'}, {'wish': 'test2', id: '2'},
-    {'wish': 'test3', id: '3'}, {'wish': 'test4', id: '4'},
-    {'wish': 'test5', id: '5'}, {'wish': 'test6', id: '6'}
+    {
+      id: '1',
+      userEmail: 'abc@abc.com',
+      wish: 'this is my wish 1',
+      fontFamily: 'Helvetica',
+      fontSize: 16,
+      fontColor: 'blue',
+      backgroundPic: 'https://images.pexels.com/photos/17679/pexels-photo.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb',
+      thumbs: 1,
+      createdTimestamp: 1525506395,
+      updatedTimestamp: 0,
+    },
+    {
+      id: '2',
+      userEmail: 'abc@abc.com',
+      wish: 'this is my wish 2',
+      fontFamily: 'Helvetica',
+      fontSize: 16,
+      fontColor: 'black',
+      backgroundPic: 'https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb',
+      thumbs: 2,
+      createdTimestamp: 1525506395,
+      updatedTimestamp: 0,
+    },
+    {
+      id: '3',
+      userEmail: 'abc@abc.com',
+      wish: 'this is my wish 3',
+      fontFamily: 'Cochin',
+      fontSize: 22,
+      fontColor: 'red',
+      backgroundPic: 'https://images.pexels.com/photos/1562/italian-landscape-mountains-nature.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb',
+      thumbs: 3,
+      createdTimestamp: 1525506395,
+      updatedTimestamp: 0,
+    },
+    {
+      id: '4',
+      userEmail: 'abc@abc.com',
+      wish: 'this is my wish 1',
+      fontFamily: 'Helvetica',
+      fontSize: 16,
+      fontColor: 'blue',
+      backgroundPic: 'https://images.pexels.com/photos/17679/pexels-photo.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb',
+      thumbs: 1,
+      createdTimestamp: 1525506395,
+      updatedTimestamp: 0,
+    },
+    {
+      id: '6',
+      userEmail: 'abc@abc.com',
+      wish: 'this is my wish 2',
+      fontFamily: 'Helvetica',
+      fontSize: 16,
+      fontColor: 'black',
+      backgroundPic: 'https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb',
+      thumbs: 2,
+      createdTimestamp: 1525506395,
+      updatedTimestamp: 0,
+    },
+    {
+      id: '5',
+      userEmail: 'abc@abc.com',
+      wish: 'this is my wish 3',
+      fontFamily: 'Cochin',
+      fontSize: 22,
+      fontColor: 'red',
+      backgroundPic: 'https://images.pexels.com/photos/1562/italian-landscape-mountains-nature.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb',
+      thumbs: 3,
+      createdTimestamp: 1525506395,
+      updatedTimestamp: 0,
+    },
   ]);
 });
 
