@@ -76,12 +76,12 @@ class Wish extends React.Component {
                  source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
                  />
             </TouchableOpacity>
- 		        <Text style={{ flex : 1, alignItems: 'flex-start', fontWeight: 'bold' }}>
+ 		        <Text style={{ flex : 1, alignItems: 'flex-start', fontFamily: 'HoeflerText-Italic', fontSize: 20 }}>
               {thumbs}
             </Text>
           </View>
           <View style={{ flex : 1}}>
-            <Text style={{ fontWeight: 'bold' }}>
+            <Text style={{ fontFamily: 'HoeflerText-Italic', fontSize: 20 }}>
               {this.getDate(createdTimestamp)}
             </Text>
           </View>

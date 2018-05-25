@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: window.width,
     height: window.height,
-    backgroundColor: '#ECEFF0',
+    backgroundColor: 'transparent',
     padding: 6,
   },
   avatarContainer: {
@@ -40,9 +40,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   name: {
-    fontFamily: 'Cochin',
-    fontSize: 20,
+    fontFamily: 'SavoyeLetPlain',
+    fontSize: 22,
     fontWeight: 'bold',
+    position: 'absolute',
+    left: 70,
+    top: 14,
   },
   item: {
     fontSize: 14,
@@ -62,13 +65,13 @@ class Menu extends React.Component {
         {
           name: 'My Wishes',
           sub_title: 'List and Update My Wishes',
-          pic: require('../../assets/new_wish_icon.png'),
+          pic: require('../../assets/02_ggpw.png'),
           action: () => { this.onItemSelected('My Wishes'); }
         },
         {
           name: 'New Wish',
           sub_title: 'Create A New Wish',
-          pic: require('../../assets/new_wish_icon.png'),
+          pic: require('../../assets/create.png'),
           action: () => { this.onItemSelected('New Wish'); }
         },
       ],
@@ -127,9 +130,9 @@ class Menu extends React.Component {
               source={{uri: this.state.picUrl}}
             />
           </TouchableOpacity>
+          <Text style={styles.name}>{this.state.name}</Text>
         </View>
-        <Text style={styles.name}>{this.state.name}</Text>
-
+        
         <View style={{marginTop: 30}}>
           <FlatList
              data={this.state.items}
