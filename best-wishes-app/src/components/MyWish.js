@@ -77,8 +77,8 @@ class MyWish extends React.Component {
 
   	for(let i = 0; i < this.state.wish.length; i++) {
   		wishArr.push(
-        <Swipeout right={this.makeSwipeButton(i)} autoClose={true}>
-  			  <View key = {i} style = {{flex:1}}>
+        <Swipeout key = {i} right={this.makeSwipeButton(i)} autoClose={true}>
+  			  <View style = {{flex:1}}>
             <ImageBackground
                style= {{
                  flex: 1,
