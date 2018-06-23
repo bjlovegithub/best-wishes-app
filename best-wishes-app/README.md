@@ -11,3 +11,7 @@ To have xcode project files for apps created by `create-react-native-app`,
 
 ## Google SignIn
 Following [this](https://www.codementor.io/microsem31/react-native-google-and-facebook-authentication-cohpznykf) to enable Google Sign In.
+
+# TODO
+## Support wechat login
+## Fix the bug in update my wish.    

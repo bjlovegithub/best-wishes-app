@@ -1,14 +1,18 @@
-import React, {StyleSheet} from 'react-native'
+import React, {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   board: {
     flex: 1,
     backgroundColor: 'white',
-    flexDirection: 'column',
-    //justifyContent: 'space-between',
+    flexDirection: 'column'
   },
 
   wish: {
     backgroundColor: 'white'
+  },
+
+  background: {
+    flex: 1,
+    justifyContent: 'center'
   }
 });

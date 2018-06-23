@@ -48,10 +48,7 @@ class Board extends React.Component {
       if (wishes.hasOwnProperty(prop)) {
         arr.push(
           <ImageBackground
-             style={{
-               flex: 1,
-               justifyContent: 'center'
-             }}
+             style={styles.background}
              source={{
                uri: wishes[prop].backgroundPic
              }}

@@ -102,7 +102,7 @@ class MyWish extends React.Component {
                source={{ uri: wish[i].backgroundPic }}>
               <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                 <Text style={fontStyle}>{ wish[i].wish }</Text>
-                <Text style={{ fontFamily: 'HoeflerText-Italic', fontSize: 20 }}>{ getDate(wish[i].createdTimestamp) }</Text>
+                <Text style={{ fontFamily: 'HoeflerText-Italic', fontSize: 20 }}>{ getDate(wish[i].createdTimestamp) } with { wish[i].thumbs } supports</Text>
               </View>
             </ImageBackground>
   			  </View>
