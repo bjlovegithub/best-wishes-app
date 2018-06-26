@@ -18,10 +18,21 @@ const ASSETS_PREFIX = '../../assets/';
 class NewWish extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      wish: '', fontFamily: 'Helvetica', fontSize: 16,
-      fontColor: 'black', backgroundPic: 'https://images.pexels.com/photos/1562/italian-landscape-mountains-nature.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb'
-    };
+
+    const wishForUpdate = Store.getMyWishForUpdate();
+    if (wishForUpdate === undefined) {
+      this.state = {
+        wish: '', fontFamily: 'Helvetica', fontSize: 16,
+        fontColor: 'black', backgroundPic: 'https://images.pexels.com/photos/1562/italian-landscape-mountains-nature.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb'
+      };
+    }
+    else {
+      this.state = {
+        wish: wishForUpdate.wish, fontFamily: wishForUpdate.fontFamily,
+        fontSize: wishForUpdate.fontSize, fontColor: wishForUpdate.fontColor,
+        backgroundPic: wishForUpdate.backgroundPic
+      };
+    }
 
     this.submit = this.submit.bind(this);
   }
@@ -67,9 +78,6 @@ class NewWish extends React.Component {
   }
 
   render() {
-    const wishForUpdate = Store.getMyWishForUpdate();
-    const wishText = wishForUpdate === undefined ? '' : wishForUpdate.wish;
-    
     return (
       <View style={{flexDirection: 'column', flex: 1}}>
         <TextInput
@@ -82,12 +90,10 @@ class NewWish extends React.Component {
           }
           style={
             {
-              fontFamily: this.state.fontFamily,
-              fontSize: this.state.fontSize,
-              color: this.state.fontColor,
               flex: 2,
             }
           }
+          value={this.state.wish}
           />
           <View style={{flexDirection: 'row', flex: 1}}>
             <View style={{flex: 1}}>
@@ -159,7 +165,7 @@ class NewWish extends React.Component {
                }}
                source={{ uri: this.state.backgroundPic}}
                >
-              <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Text
                    style={{
                      fontFamily: this.state.fontFamily,

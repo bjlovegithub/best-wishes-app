@@ -33,7 +33,6 @@ class Wish extends React.Component {
   }
 
   onChange() {
-    console.log(Store.getWish(this.state.id));
     this.setState(Store.getWish(this.state.id));
   }
 
@@ -45,7 +44,7 @@ class Wish extends React.Component {
     const { wish, fontFamily, fontSize, fontColor, thumbs, createdTimestamp } = this.state;
     const fontStyle = {
       fontSize: fontSize, color: fontColor,
-      fontFamily: fontFamily,       
+      fontFamily: fontFamily,
     };
     return (
 	    <View style={{flexDirection: 'column', flex: 1}}>
