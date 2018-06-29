@@ -78,6 +78,7 @@ class NewWish extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     return (
       <View style={{flexDirection: 'column', flex: 1}}>
         <TextInput
@@ -140,6 +141,7 @@ class NewWish extends React.Component {
                 })}
                 >
                 <Picker.Item color='red' label={'Red'} value={'red'} />
+                <Picker.Item color='blue' label={'Blue'} value={'blue'} />
                 <Picker.Item color='black' label={'Black'} value={'black'} />
               </Picker>
             </View>

@@ -14,4 +14,3 @@ Following [this](https://www.codementor.io/microsem31/react-native-google-and-fa
 
 # TODO
 ## Support wechat login
-## Fix the bug in update my wish.    

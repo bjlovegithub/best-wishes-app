@@ -131,6 +131,10 @@ var Store = assign({}, EventEmitter.prototype, {
     deleteMyWish(wish);
   },
 
+  clearWishInEditor() {
+    clearWishInEditor();
+  },
+
   getSubmitStatus() {
     return submitSuccessful;
   },
@@ -291,6 +295,10 @@ async function deleteMyWish(wish) {
   }
 }
 
+function clearWishInEditor() {
+  myWishForUpdate = undefined;
+}
+
 ActionDispatcher.register(function(action) {
   switch (action.type) {
   case ActionType.ACT_FETCH_BOARD_WISH:
@@ -323,6 +331,9 @@ ActionDispatcher.register(function(action) {
     break;
   case ActionType.ACT_DELETE_MY_WISH:
     Store.deleteMyWish(action.wish);
+    break;
+  case ActionType.ACT_CLEAR_WISH_IN_EDITOR:
+    Store.clearWishInEditor();
     break;
   default:
     console.log("Unknown action for AuthStore: " + action.type);

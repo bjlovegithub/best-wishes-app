@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { List, ListItem } from "react-native-elements";
 
-import AuthStore from '../store/Store';
+import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
 
@@ -83,19 +83,19 @@ class Menu extends React.Component {
   }
 
   componentDidMount() {
-    AuthStore.addChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
+    Store.addChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
 
     Actions.loadAuthToken();
   }
 
   componentWillUnmount() {
-    AuthStore.removeChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
+    Store.removeChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
   }
 
   onChange() {
-    const auth = AuthStore.getAuthInfo();
+    const auth = Store.getAuthInfo();
     if (auth.isLogin === true) {
-      this.setState(AuthStore.getAuthInfo());
+      this.setState(Store.getAuthInfo());
     }
     else {
       this.setState({isLogin: false, picUrl: uri, name: DEFAULT_NAME});
@@ -108,6 +108,7 @@ class Menu extends React.Component {
         this.props.screenProps.rootNavigation.navigate('MyWish');
       }
       else if (sig === 'New Wish') {
+        Actions.clearWishInEditor();
         this.props.screenProps.rootNavigation.navigate('NewWish');
       }
     }

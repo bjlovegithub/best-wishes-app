@@ -58,6 +58,12 @@ var Actions = {
       wish: wish,
     });
   },
+
+  clearWishInEditor: function() {
+    ActionDispatcher.dispatch({
+      type: ActionType.ACT_CLEAR_WISH_IN_EDITOR,
+    });
+  }
 };
 
 module.exports = Actions;
