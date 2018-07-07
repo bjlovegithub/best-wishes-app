@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-  StyleSheet, Text, View, TextInput, Picker,
+  Text, View, TextInput, Picker,
   ImageBackground, Modal, Alert,
 } from 'react-native';
 
@@ -12,6 +12,8 @@ import Store from '../store/Store';
 import ActionType from '../common/ActionType';
 import Events from '../common/Events';
 import Actions from '../actions/Actions';
+
+import styles from '../styles/NewWish';
 
 const ASSETS_PREFIX = '../../assets/';
 
@@ -80,7 +82,7 @@ class NewWish extends React.Component {
   render() {
     console.log(this.state);
     return (
-      <View style={{flexDirection: 'column', flex: 1}}>
+      <View style={styles.view}>
         <TextInput
            multiline
            onChangeText={(text) => {
@@ -89,19 +91,15 @@ class NewWish extends React.Component {
              });
             }
           }
-          style={
-            {
-              flex: 2,
-            }
-          }
+          style={styles.textInput}
           value={this.state.wish}
           />
-          <View style={{flexDirection: 'row', flex: 1}}>
-            <View style={{flex: 1}}>
-              <Text style={{textAlign: 'center'}}>Font Style</Text>
+          <View style={styles.pickersView}>
+            <View style={styles.pickerView}>
+              <Text style={styles.pickerFontStyle}>Font Style</Text>
               <Picker
                  selectedValue={this.state.fontFamily}
-                 itemStyle={{height: 60, fontSize: 12}}
+                 itemStyle={styles.pickerItem}
                  onValueChange={(itemValue, itemIndex) => this.setState({
                    fontFamily: itemValue,
                 })}>
@@ -114,11 +112,11 @@ class NewWish extends React.Component {
                 <Picker.Item label='Bradley' value='BradleyHandITCTT-Bold' />
               </Picker>
             </View>
-            <View style={{flex: 1}}>
-              <Text style={{textAlign: 'center'}}>Font Size</Text>
+            <View style={styles.pickerView}>
+              <Text style={styles.pickerFontStyle}>Font Size</Text>
               <Picker
                  selectedValue={this.state.fontSize.toString()}
-                 itemStyle={{height: 60, fontSize: 12}}
+                 itemStyle={styles.pickerItem}
                  onValueChange={(itemValue, itemIndex) => this.setState({
                    fontSize: parseInt(itemValue),
                 })}
@@ -131,11 +129,11 @@ class NewWish extends React.Component {
                 <Picker.Item label='22' value='22' />
               </Picker>
             </View>
-            <View style={{flex: 1}}>
-              <Text style={{textAlign: 'center'}}>Font Color</Text>
+            <View style={styles.pickerView}>
+              <Text style={styles.pickerFontStyle}>Font Color</Text>
               <Picker
                  selectedValue={this.state.fontColor}
-                 itemStyle={{height: 60, fontSize: 12}}
+                 itemStyle={styles.pickerItem}
                  onValueChange={(itemValue, itemIndex) => this.setState({
                    fontColor: itemValue,
                 })}
@@ -145,11 +143,11 @@ class NewWish extends React.Component {
                 <Picker.Item color='black' label={'Black'} value={'black'} />
               </Picker>
             </View>
-            <View style={{flex: 1}}>
-              <Text style={{textAlign: 'center'}}>Background</Text>
+            <View style={styles.pickerView}>
+              <Text style={styles.pickerFontStyle}>Background</Text>
               <Picker
                  selectedValue={this.state.backgroundPic}
-                 itemStyle={{height: 60, fontSize: 12}}
+                 itemStyle={styles.pickerItem}
                  onValueChange={(itemValue, itemIndex) => this.setState({
                    backgroundPic: itemValue,
                 })}
@@ -159,15 +157,12 @@ class NewWish extends React.Component {
               </Picker>
             </View>
           </View>
-          <View style={{flex: 3}}>
+          <View style={styles.imageView}>
             <ImageBackground
-               style={{
-                 flex: 1,
-                 justifyContent: 'center'
-               }}
+               style={styles.imageBackground}
                source={{ uri: this.state.backgroundPic}}
                >
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <View style={styles.imageTextStyle}>
                 <Text
                    style={{
                      fontFamily: this.state.fontFamily,
@@ -179,29 +174,16 @@ class NewWish extends React.Component {
               </View>
             </ImageBackground>
           </View>
-          <View style={{flex: 0.6, padding: 20, flexDirection: 'row'}}>
-            <View style={{flex: 0.3}} />
+          <View style={styles.buttonView}>
+            <View style={styles.dummyView} />
             <Button style={styles.buttonStyle} textStyle={styles.buttonTextStyle} onPress={this.submit}>
               Publish To The World!
             </Button>
-            <View style={{flex: 0.3}} />
+            <View style={styles.dummyView} />
           </View>
       </View>
   	);
   }
 }
-
-const styles = StyleSheet.create({
-  buttonStyle: {
-    borderColor: '#333',
-    borderWidth: 1,
-    borderRadius: 22,
-    flex: 1,
-  },
-
-  buttonTextStyle: {
-    fontSize: 12
-  },
-});
 
 module.exports = NewWish;

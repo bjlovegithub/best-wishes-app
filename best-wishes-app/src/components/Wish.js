@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-  StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground
+  Text, View, Image, TouchableOpacity, ImageBackground
 } from 'react-native';
 
 import Store from '../store/Store';
