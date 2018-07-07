@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { View } from 'react-native';
 
 import SideMenu from 'react-native-side-menu';
 

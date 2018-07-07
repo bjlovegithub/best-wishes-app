@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Component,
   Dimensions,
   StyleSheet,
   ScrollView,
@@ -17,43 +16,11 @@ import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
 
+import styles from '../styles/Menu';
+
 const window = Dimensions.get('window');
 const uri = 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png';
 const DEFAULT_NAME = 'Happy :)';
-
-const styles = StyleSheet.create({
-  menu: {
-    flex: 1,
-    width: window.width,
-    height: window.height,
-    backgroundColor: 'transparent',
-    padding: 6,
-  },
-  avatarContainer: {
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    flex: 1,
-  },
-  name: {
-    fontFamily: 'SavoyeLetPlain',
-    fontSize: 22,
-    fontWeight: 'bold',
-    position: 'absolute',
-    left: 70,
-    top: 14,
-  },
-  item: {
-    fontSize: 14,
-    fontWeight: '300',
-    paddingTop: 15,
-    textDecorationLine: 'underline',
-  },
-});
 
 class Menu extends React.Component {
   constructor(props) {

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-  StyleSheet, Text, View, Image, ScrollView,
+  StyleSheet, Text, View, ScrollView,
   ImageBackground, Alert, RefreshControl
 } from 'react-native';
 
@@ -12,6 +12,8 @@ import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
 import {getDate} from '../common/Util';
+
+import styles from '../styles/MyWish';
 
 class MyWish extends React.Component {
   constructor(props) {
@@ -91,18 +93,16 @@ class MyWish extends React.Component {
         fontSize: wish[i].fontSize
       };
   		wishArr.push(
-        <Swipeout key = {i} right={this.makeSwipeButton(i)} autoClose={true}>
-  			  <View style = {{flex:1}}>
+        <Swipeout key = {i} right = {this.makeSwipeButton(i)} autoClose = {true}>
+  			  <View style = {styles.swipeView}>
             <ImageBackground
-               style= {{
-                 flex: 1,
-                 justifyContent: 'center',
-                 height: 200,
-               }}
-               source={{ uri: wish[i].backgroundPic }}>
-              <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={fontStyle}>{ wish[i].wish }</Text>
-                <Text style={{ fontFamily: 'HoeflerText-Italic', fontSize: 20 }}>{ getDate(wish[i].createdTimestamp) } with { wish[i].thumbs } supports</Text>
+               style = {styles.backgroundImage}
+               source = {{ uri: wish[i].backgroundPic }}>
+              <View style = {styles.dateView}>
+                <Text style = {fontStyle}>{ wish[i].wish }</Text>
+                <Text style = {styles.countView}>
+                  { getDate(wish[i].createdTimestamp) } with { wish[i].thumbs } supports
+                </Text>
               </View>
             </ImageBackground>
   			  </View>

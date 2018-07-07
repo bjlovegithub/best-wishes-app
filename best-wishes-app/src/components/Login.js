@@ -2,8 +2,7 @@
 
 import React from 'react';
 import {
-  StyleSheet, Text, View, Image,
-  TouchableOpacity
+  View, Image, TouchableOpacity
 } from 'react-native';
 import Expo from 'expo';
 import { Button } from 'react-native-elements';
@@ -12,6 +11,8 @@ import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
 import { GOOGLE_IOS_CLIENT_ID } from '../common/Constants';
+
+import styles from '../styles/Login';
 
 const GOOGLE_SIGNIN_ICON = require('../../assets/btn_google_signin.png');
 
@@ -82,11 +83,11 @@ class Login extends React.Component {
     }
     else {
       return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={styles.buttonView}>
           <TouchableOpacity onPress={this.googleSignIn}>
             <Image
                source={GOOGLE_SIGNIN_ICON}
-               style={{height: 50, resizeMode: 'contain'}}
+               style={styles.image}
                />
           </TouchableOpacity>
         </View>

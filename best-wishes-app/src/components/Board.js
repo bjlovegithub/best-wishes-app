@@ -2,15 +2,14 @@
 
 import React from 'react';
 import {
-  StyleSheet, Text, View, ImageBackground, Image,
-  ScrollView, Dimensions, Button
+  StyleSheet, View, ImageBackground, Dimensions
 } from 'react-native';
 
 import Wish from './Wish';
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
-import styles from '../styles/main';
+import styles from '../styles/Main';
 
 const window = Dimensions.get('window');
 
