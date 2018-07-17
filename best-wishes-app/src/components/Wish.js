@@ -10,6 +10,8 @@ import Actions from '../actions/Actions';
 import Events from '../common/Events';
 import {getDate} from '../common/Util';
 
+import styles from '../styles/Wish';
+
 class Wish extends React.Component {
   constructor(props) {
     super(props);
@@ -47,32 +49,29 @@ class Wish extends React.Component {
       fontFamily: fontFamily,
     };
     return (
-	    <View style={{flexDirection: 'column', flex: 1}}>
-        <View style={{ flex: 6, justifyContent: 'center', alignItems: 'center' }}>
+	    <View style={styles.wishView}>
+        <View style={styles.wishStyle}>
           <Text style={fontStyle}>
             {this.state.wish}
           </Text>
         </View>
         <ImageBackground
-           style={{
-             flex: 1, flexDirection: 'row',
-             alignItems: 'center', backgroundColor: 'white', marginBottom: 0
-           }}
+           style={styles.backgroundStyle}
            source={require('../../assets/botton_background.jpg')}
            >
-          <View style={{ flex : 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', borderRadius: 10 }}>
+          <View style={styles.thumbViewStyle}>
             <TouchableOpacity onPress={this.handleClick} style={{ flex : 1, alignItems: 'flex-end' }}>
               <Image
-                 style={{ width: 20, height: 20 }}
+                 style={styles.thumbImageStyle}
                  source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
                  />
             </TouchableOpacity>
- 		        <Text style={{ flex : 1, alignItems: 'flex-start', fontFamily: 'HoeflerText-Italic', fontSize: 20 }}>
+ 		        <Text style={styles.thumbTextStyle}>
               {thumbs}
             </Text>
           </View>
-          <View style={{ flex : 1}}>
-            <Text style={{ fontFamily: 'HoeflerText-Italic', fontSize: 20 }}>
+          <View style={styles.dateView}>
+            <Text style={styles.dateTextStyle}>
               {getDate(createdTimestamp)}
             </Text>
           </View>
