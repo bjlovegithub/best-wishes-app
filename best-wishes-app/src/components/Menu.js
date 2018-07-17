@@ -19,26 +19,29 @@ import Events from '../common/Events';
 import styles from '../styles/Menu';
 
 const window = Dimensions.get('window');
-const uri = 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png';
+const DEFAULT_PIC = 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png';
 const DEFAULT_NAME = 'Happy :)';
+
+const MY_WISH_ICON = require('../../assets/02_ggpw.png');
+const NEW_WISH_ICON = require('../../assets/create.png');
 
 class Menu extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isLogin: false, picUrl: uri, name: DEFAULT_NAME,
+      isLogin: false, picUrl: DEFAULT_PIC, name: DEFAULT_NAME,
       items: [
         {
           name: 'My Wishes',
           sub_title: 'List and Update My Wishes',
-          pic: require('../../assets/02_ggpw.png'),
+          pic: MY_WISH_ICON,
           action: () => { this.onItemSelected('My Wishes'); }
         },
         {
           name: 'New Wish',
           sub_title: 'Create A New Wish',
-          pic: require('../../assets/create.png'),
+          pic: NEW_WISH_ICON,
           action: () => { this.onItemSelected('New Wish'); }
         },
       ],
@@ -65,7 +68,7 @@ class Menu extends React.Component {
       this.setState(Store.getAuthInfo());
     }
     else {
-      this.setState({isLogin: false, picUrl: uri, name: DEFAULT_NAME});
+      this.setState({isLogin: false, picUrl: DEFAULT_PIC, name: DEFAULT_NAME});
     }
   }
 
