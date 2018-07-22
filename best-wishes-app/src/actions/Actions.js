@@ -63,6 +63,12 @@ var Actions = {
     ActionDispatcher.dispatch({
       type: ActionType.ACT_CLEAR_WISH_IN_EDITOR,
     });
+  },
+
+  confirmCancelEdit: function() {
+    ActionDispatcher.dispatch({
+      type: ActionType.ACT_CONFIRM_CANCEL_IN_EDITOR,
+    });
   }
 };
 

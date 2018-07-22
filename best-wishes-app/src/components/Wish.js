@@ -12,6 +12,9 @@ import {getDate} from '../common/Util';
 
 import styles from '../styles/Wish';
 
+const ThumbupBackground = require('../../assets/botton_background.jpg');
+const ThumbupLogo = require('../../assets/thumbs-up-sign_1f44d.png');
+
 class Wish extends React.Component {
   constructor(props) {
     super(props);
@@ -46,7 +49,7 @@ class Wish extends React.Component {
     const { wish, fontFamily, fontSize, fontColor, thumbs, createdTimestamp } = this.state;
     const fontStyle = {
       fontSize: fontSize, color: fontColor,
-      fontFamily: fontFamily,
+      fontFamily: fontFamily, textAlign: 'center'
     };
     return (
 	    <View style={styles.wishView}>
@@ -57,13 +60,13 @@ class Wish extends React.Component {
         </View>
         <ImageBackground
            style={styles.backgroundStyle}
-           source={require('../../assets/botton_background.jpg')}
+           source={ThumbupBackground}
            >
           <View style={styles.thumbViewStyle}>
             <TouchableOpacity onPress={this.handleClick} style={{ flex : 1, alignItems: 'flex-end' }}>
               <Image
                  style={styles.thumbImageStyle}
-                 source={{uri: 'https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/thumbs-up-sign_1f44d.png'}}
+                 source={ThumbupLogo}
                  />
             </TouchableOpacity>
  		        <Text style={styles.thumbTextStyle}>

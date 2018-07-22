@@ -135,6 +135,10 @@ var Store = assign({}, EventEmitter.prototype, {
     clearWishInEditor();
   },
 
+  confirmCancel() {
+    Store.emitChange(Events.CONFIRM_CANCEL_EVENT);
+  },
+
   getSubmitStatus() {
     return submitSuccessful;
   },
@@ -334,6 +338,9 @@ ActionDispatcher.register(function(action) {
     break;
   case ActionType.ACT_CLEAR_WISH_IN_EDITOR:
     Store.clearWishInEditor();
+    break;
+  case ActionType.ACT_CONFIRM_CANCEL_IN_EDITOR:
+    Store.confirmCancel();
     break;
   default:
     console.log("Unknown action for AuthStore: " + action.type);

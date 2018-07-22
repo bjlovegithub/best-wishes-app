@@ -15,7 +15,11 @@ import Actions from '../actions/Actions';
 
 import styles from '../styles/NewWish';
 
-const ASSETS_PREFIX = '../../assets/';
+const BGPics = {
+  pic1: require("../../assets/wish-bg-1.jpg"),
+  pic2: require("../../assets/wish-bg-2.jpg"),
+};
+
 
 class NewWish extends React.Component {
   constructor(props) {
@@ -25,7 +29,7 @@ class NewWish extends React.Component {
     if (wishForUpdate === undefined) {
       this.state = {
         wish: '', fontFamily: 'Helvetica', fontSize: 16,
-        fontColor: 'black', backgroundPic: 'https://images.pexels.com/photos/1562/italian-landscape-mountains-nature.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb'
+        fontColor: 'black', backgroundPic: 'pic1'
       };
     }
     else {
@@ -37,6 +41,7 @@ class NewWish extends React.Component {
     }
 
     this.submit = this.submit.bind(this);
+    this.goBack = this.goBack.bind(this);
   }
 
   componentDidMount() {
@@ -44,11 +49,18 @@ class NewWish extends React.Component {
       'type': Events.MYWISH_SAVED_EVENT,
       'callback': this.onSaved
     });
+    Store.addChangeListener({
+      'type': Events.CONFIRM_CANCEL_EVENT,
+      'callback': this.goBack
+    });
   }
 
   componentWillUnmount() {
     Store.removeChangeListener({
       'type': Events.MYWISH_SAVED_EVENT, 'callback': this.onSaved
+    });
+    Store.removeChangeListener({
+      'type': Events.CONFIRM_CANCEL_EVENT, 'callback': this.goBack
     });
   }
 
@@ -75,19 +87,29 @@ class NewWish extends React.Component {
     }
   }
 
+  goBack() {
+    this.props.navigation.setParams({
+      isEditing: false,
+    });
+    this.props.navigation.goBack();
+  }
+
   submit() {
     Actions.submitWish(this.state);
   }
 
   render() {
-    console.log(this.state);
     return (
       <View style={styles.view}>
         <TextInput
            multiline
+           maxLength={166}
            onChangeText={(text) => {
              this.setState({
                wish: text,
+             });
+             this.props.navigation.setParams({
+               isEditing: true,
              });
             }
           }
@@ -152,15 +174,15 @@ class NewWish extends React.Component {
                    backgroundPic: itemValue,
                 })}
                 >
-                <Picker.Item label={'Sea'} value={'https://images.pexels.com/photos/1562/italian-landscape-mountains-nature.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb'} />
-                <Picker.Item label={'Sky'} value={'https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb'} />
+                <Picker.Item label={'Sea'} value={'pic1'} />
+                <Picker.Item label={'Sky'} value={'pic2'} />
               </Picker>
             </View>
           </View>
           <View style={styles.imageView}>
             <ImageBackground
                style={styles.imageBackground}
-               source={{ uri: this.state.backgroundPic}}
+               source={BGPics[this.state.backgroundPic]}
                >
               <View style={styles.imageTextStyle}>
                 <Text
@@ -168,6 +190,7 @@ class NewWish extends React.Component {
                      fontFamily: this.state.fontFamily,
                      fontSize: this.state.fontSize,
                      color: this.state.fontColor,
+                     textAlign: 'center'
                    }}>
                   {this.state.wish}
                 </Text>

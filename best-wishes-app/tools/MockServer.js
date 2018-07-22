@@ -14,7 +14,7 @@ router.get('/board_wish/', function (req, res) {
     {
       id: '1',
       userEmail: 'abc@abc.com',
-      wish: 'this is my wish 1',
+      wish: 'this is my wish 1\nhappy',
       fontFamily: 'Helvetica',
       fontSize: 16,
       fontColor: 'blue',
