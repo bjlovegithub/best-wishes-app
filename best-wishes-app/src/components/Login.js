@@ -4,7 +4,7 @@ import React from 'react';
 import {
   View, Image, TouchableOpacity
 } from 'react-native';
-import Expo from 'expo';
+//import Expo from 'expo';
 import { Button } from 'react-native-elements';
 
 import AuthStore from '../store/Store';
@@ -43,6 +43,7 @@ class Login extends React.Component {
 
   async googleSignIn() {
     console.log(GOOGLE_IOS_CLIENT_ID);
+    /*
     try {
       const result = await Expo.Google.logInAsync({
         iosClientId: GOOGLE_IOS_CLIENT_ID,
@@ -57,6 +58,7 @@ class Login extends React.Component {
     } catch(e) {
       console.log('Google login failed: ' + e);
     }
+     */
   }
 
   async googleSignOut() {
