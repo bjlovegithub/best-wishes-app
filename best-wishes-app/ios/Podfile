@@ -8,6 +8,7 @@ target 'Wishes' do
   # Pods for Wishes
 
   pod 'GoogleSignIn'
+  pod 'GTMAppAuth'
 
   target 'WishesTests' do
     inherit! :search_paths
