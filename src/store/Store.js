@@ -70,7 +70,7 @@ var Store = assign({}, EventEmitter.prototype, {
     });
 
     auth = {
-      isLogin: true, picUrl: tokenInfo.user.photoUrl,
+      isLogin: true, picUrl: tokenInfo.user.photo,
       name: tokenInfo.user.name, user_email: tokenInfo.user.email,
       token: tokenInfo.accessToken
     };
@@ -86,7 +86,7 @@ var Store = assign({}, EventEmitter.prototype, {
       syncInBackground: true,
     }).then(ret => {
       auth = {
-        isLogin: true, picUrl: ret.user.photoUrl,
+        isLogin: true, picUrl: ret.user.photo,
         name: ret.user.name, token: ret.accessToken
       };
       this.emitChange(Events.AUTH_EVENT);
