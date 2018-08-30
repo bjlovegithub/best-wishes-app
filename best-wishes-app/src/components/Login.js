@@ -4,8 +4,9 @@ import React from 'react';
 import {
   View, Image, TouchableOpacity
 } from 'react-native';
-//import Expo from 'expo';
 import { Button } from 'react-native-elements';
+
+import { GoogleSignin } from 'react-native-google-signin';
 
 import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
@@ -16,11 +17,15 @@ import styles from '../styles/Login';
 
 const GOOGLE_SIGNIN_ICON = require('../../assets/btn_google_signin.png');
 
+GoogleSignin.configure({
+  iosClientId: GOOGLE_IOS_CLIENT_ID,
+});
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {isLogin: false, picUrl: '', name: ''};
+    this.state = {isLogin: false, picUrl: '', name: '', isSigninInProgress: false};
 
     this.googleSignIn = this.googleSignIn.bind(this);
     this.googleSignOut = this.googleSignOut.bind(this);
@@ -43,6 +48,22 @@ class Login extends React.Component {
 
   async googleSignIn() {
     console.log(GOOGLE_IOS_CLIENT_ID);
+
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      Actions.saveAuthToken(userInfo, "google-auth-token");
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (f.e. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }    
     /*
     try {
       const result = await Expo.Google.logInAsync({
@@ -62,7 +83,14 @@ class Login extends React.Component {
   }
 
   async googleSignOut() {
-    Actions.deleteAuthToken("google-auth-token");
+    try {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+      
+      Actions.deleteAuthToken("google-auth-token");      
+    } catch (error) {
+      console.error(error);
+    }    
   }
 
   render() {
