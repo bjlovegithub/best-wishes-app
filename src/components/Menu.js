@@ -24,6 +24,7 @@ const DEFAULT_NAME = 'Happy :)';
 
 const MY_WISH_ICON = require('../../assets/02_ggpw.png');
 const NEW_WISH_ICON = require('../../assets/create.png');
+const FEEDBACK_ICON = require('../../assets/feedback.png');
 
 class Menu extends React.Component {
   constructor(props) {
@@ -43,6 +44,12 @@ class Menu extends React.Component {
           sub_title: 'Create A New Wish',
           pic: NEW_WISH_ICON,
           action: () => { this.onItemSelected('New Wish'); }
+        },
+        {
+          name: 'Feedback',
+          sub_title: 'Send us your think',
+          pic: FEEDBACK_ICON,
+          action: () => { this.onItemSelected('Feedback'); }
         },
       ],
     };
@@ -80,6 +87,9 @@ class Menu extends React.Component {
       else if (sig === 'New Wish') {
         Actions.clearWishInEditor();
         this.props.screenProps.rootNavigation.navigate('NewWish');
+      }
+      else if (sig === 'Feedback') {
+        this.props.screenProps.rootNavigation.navigate('Feedback');
       }
     }
     else {

@@ -9,6 +9,7 @@ import Board from './src/components/Board';
 import Login from './src/components/Login';
 import MyWish from './src/components/MyWish';
 import NewWish from './src/components/NewWish';
+import Feedback from './src/components/Feedback';
 import HomeScreen from './src/components/Home';
 import Actions from './src/actions/Actions';
 
@@ -40,6 +41,12 @@ const RootStack = createStackNavigator(
       navigationOptions: {
         gesturesEnabled: false,
       },
+    },
+    Feedback: {
+      screen: Feedback,
+      navigationOptions: {
+        title: 'Feedback',
+		  },
     }
   },
 
