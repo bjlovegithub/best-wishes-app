@@ -26,10 +26,18 @@ Following [this](https://www.codementor.io/microsem31/react-native-google-and-fa
 
 **Note**:
 
-* If you create app from `create-react-native-app`, you have `eject` it first to get files for Xcode.
+* If you create app from `create-react-native-app`, you have to `eject` it first to get files for Xcode.
 * Update Xcode to the latest version.
 * After using `pod` install dependent libraries for Google Signin. Open the project by Xcode through opening `Wishes.xcworkspace`, not `Wishes.xcodeproj`.
-* Get the Google Signin Token for iOS and set up the `URL Type` for the project.
+* Get the Google Signin Token for iOS and set up the `URL Type` for the project. Files for the Google Auth from Firebase are not included in the code base. So to make it work, the following steps should be done:
+  * Run `react-native link react-native-google-signin`
+  * Install the Google Signin SDK with [CocoaPods](https://cocoapods.org/) (add `pod 'GoogleSignIn'` in your Podfile and run `pod install`)
+  * In Firebase, create a project. Go to project overview page, add an iOS app. Then enable the auth function for this app. Remeber to download the `GoogleService-Info.plist` after adding the iOS app.
+  * Configure URL types in the Info panel
+    - add a URL with scheme set to your `REVERSED_CLIENT_ID` (found inside the plist)
+    - add a URL with scheme set to your `bundle id`
+  * Add `openURL` function in `AppDelegate.m`
+  * Refer to [this link](https://github.com/react-native-community/react-native-google-signin/blob/master/ios-guide.md) for detailed steps.
 
 ## TODO
 
