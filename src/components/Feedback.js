@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-  Text, View, Image, TouchableOpacity, ImageBackground
+  Text, View, Image, TouchableOpacity, ImageBackground, TextInput
 } from 'react-native';
 
 import {
@@ -13,15 +13,16 @@ import {
   Form,
   FormGroup,
   Label,
+  Input,
+  Switch,
 } from 'react-native-clean-form';
-import { Input } from 'react-native-elements';
 
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
 import {getDate} from '../common/Util';
 
-import styles from '../styles/Wish';
+import styles from '../styles/Feedback';
 
 const ThumbupBackground = require('../../assets/botton_background.jpg');
 const ThumbupLogo = require('../../assets/thumbs-up-sign_1f44d.png');
@@ -36,7 +37,7 @@ class Feedback extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = props.wish;
+    this.state = {name: "", email: "", message: "", isSending: false};
 
     this.onChange = this.onChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -45,18 +46,20 @@ class Feedback extends React.Component {
 
   componentWillMount() {
     Store.addChangeListener({
-      "type": Events.THUMB_UP_EVENT, "callback": this.onChange
+      "type": Events.FEEDBACK_SENT_EVENT, "callback": this.onChange
     });
   }
 
   componentWillUnmount() {
     Store.removeChangeListener({
-      "type": Events.THUMB_UP_EVENT, "callback": this.onChange
+      "type": Events.FEEDBACK_SENT_EVENT, "callback": this.onChange
     });
   }
 
   onChange() {
-    this.setState(Store.getWish(this.state.id));
+    const resp = Store.getFeedbackSentResp();
+    console.log(resp);
+    this.setState({isSending: false});
   }
 
   handleClick() {
@@ -64,30 +67,53 @@ class Feedback extends React.Component {
   }
 
   onSubmit() {
+    this.setState({isSending: true});
+
+    Actions.submitFeedback(this.state);
   }
 
   render() {
     const { handleSubmit, submitting } = this.props;
 
     return (
-      <View>
+      <View style={styles.backgroundStyle}>
         <Form>
           <FieldsContainer>
             <Fieldset label="Contact details">
-              <Input name="first_name" label="First name" placeholder="John" />
-              <Input name="last_name" label="Last name" placeholder="Doe" />
-              <Input name="email" label="Email" placeholder="something@domain.com" keyboardType="email-address" returnKeyType="next" blurOnSubmit={false} />
-              <Input name="telephone" label="Phone" placeholder="+45 88 88 88 88" dataDetectorTypes="phoneNumber" keyboardType="phone-pad" />
-              <Input name="message" label="Message" placeholder="" multiline={true} numberOfLines={5}  inlineLabel={false} />
+              <FormGroup>
+                <Label>Name</Label>
+                <Input placeholder="Esben" disabled={this.state.isSending} onChangeText={(text) => {
+                    this.setState({
+                      name: text,
+                    });
+                  }} />
+              </FormGroup>
+              <FormGroup>
+                <Label>Email</Label>
+                <Input placeholder="esbenspetersen@gmail.com" disabled={this.state.isSending} onChangeText={(text) => {
+                    this.setState({
+                      email: text,
+                    });
+                  }} />
+              </FormGroup>
             </Fieldset>
-            <Fieldset label="Shipping details" last>
-              <Input name="address" label="Address" placeholder="Hejrevej 33" />
-              <Input name="city" label="City" placeholder="Copenhagen" />
-              <Input name="zip" label="ZIP Code" placeholder="2400" />
+            <Fieldset label="Message" last>
             </Fieldset>
+            <TextInput
+               multiline
+               maxLength={400}
+               onChangeText={(text) => {
+                 this.setState({
+                   message: text,
+                 });
+                }
+              }
+              style={{flex: 8, marginLeft: 25, marginRight: 25, height: 40}}
+              disabled={this.state.isSending}
+              />
           </FieldsContainer>
           <ActionsContainer>
-            <Button icon="md-checkmark" iconPlacement="right" onPress={this.onSubmit} submitting={true}>Save</Button>
+            <Button icon="md-checkmark" iconPlacement="right" onPress={this.onSubmit} disabled={this.state.isSending}>Send</Button>
           </ActionsContainer>
         </Form>
       </View>

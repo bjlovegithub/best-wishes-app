@@ -19,6 +19,8 @@ var myWish = [];
 
 var submitSuccessful = true;
 
+var feedbackSentResp = {};
+
 // for update my wish.
 var myWishForUpdate = undefined;
 
@@ -127,6 +129,10 @@ var Store = assign({}, EventEmitter.prototype, {
     submitMyWish(wish);
   },
 
+  submitFeedback(feedback) {
+    submitFeedback(feedback);
+  },
+
   deleteMyWish(wish) {
     deleteMyWish(wish);
   },
@@ -141,6 +147,10 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getSubmitStatus() {
     return submitSuccessful;
+  },
+
+  getFeedbackSentResp() {
+    return feedbackSentResp;
   },
 
   getMyWish() {
@@ -276,6 +286,26 @@ async function submitMyWish(wish) {
   }
 }
 
+async function submitFeedback(feedback) {
+  try {
+    const response = await fetch(
+      'http://localhost:9999/feedback/' , {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(feedback),
+      }
+    );
+    const feedbackSentResp = response;
+
+    Store.emitChange(Events.FEEDBACK_SENT_EVENT);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function deleteMyWish(wish) {
   try {
     const response = await fetch(
@@ -332,6 +362,9 @@ ActionDispatcher.register(function(action) {
     break;
   case ActionType.ACT_SUBMIT_MY_WISH:
     Store.submitMyWish(action.wish);
+    break;
+  case ActionType.ACT_SUBMIT_FEEDBACK:
+    Store.sbmitFeedback(action.feedback);
     break;
   case ActionType.ACT_DELETE_MY_WISH:
     Store.deleteMyWish(action.wish);

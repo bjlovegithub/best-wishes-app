@@ -47,6 +47,9 @@ const RootStack = createStackNavigator(
       navigationOptions: {
         title: 'Feedback',
 		  },
+      navigationOptions: {
+        gesturesEnabled: false,
+      },
     }
   },
 

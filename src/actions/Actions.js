@@ -52,6 +52,13 @@ var Actions = {
     });
   },
 
+  submitFeedback: function(feedback) {
+    ActionDispatcher.dispatch({
+      type: ActionType.ACT_SUBMIT_FEEDBACK,
+      feedback: feedback,
+    });
+  },
+
   deleteMyWish: function(wish) {
     ActionDispatcher.dispatch({
       type: ActionType.ACT_DELETE_MY_WISH,
