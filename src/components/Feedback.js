@@ -75,8 +75,11 @@ class Feedback extends React.Component {
   render() {
     const { handleSubmit, submitting } = this.props;
 
-    console.log("---");
-    console.log(this.state.isSending);
+    var button;
+    if (this.state.isSending)
+      button = <Button icon="md-time" iconPlacement="right" onPress={this.onSubmit} disabled={this.state.isSending}>Sending</Button>;
+    else
+      button = <Button icon="md-checkmark" iconPlacement="right" onPress={this.onSubmit} disabled={this.state.isSending}>Send</Button>;
     
     return (
       <View style={styles.backgroundStyle}>
@@ -116,7 +119,7 @@ class Feedback extends React.Component {
               />
           </FieldsContainer>
           <ActionsContainer>
-            <Button icon="md-checkmark" iconPlacement="right" onPress={this.onSubmit} disabled={this.state.isSending}>Send</Button>
+            {button}
           </ActionsContainer>
         </Form>
       </View>
