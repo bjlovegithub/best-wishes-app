@@ -68,13 +68,16 @@ class Feedback extends React.Component {
 
   onSubmit() {
     this.setState({isSending: true});
-
+  
     Actions.submitFeedback(this.state);
   }
 
   render() {
     const { handleSubmit, submitting } = this.props;
 
+    console.log("---");
+    console.log(this.state.isSending);
+    
     return (
       <View style={styles.backgroundStyle}>
         <Form>
@@ -82,7 +85,7 @@ class Feedback extends React.Component {
             <Fieldset label="Contact details">
               <FormGroup>
                 <Label>Name</Label>
-                <Input placeholder="Esben" disabled={this.state.isSending} onChangeText={(text) => {
+                <Input placeholder="Esben" editable={!this.state.isSending} onChangeText={(text) => {
                     this.setState({
                       name: text,
                     });
@@ -90,7 +93,7 @@ class Feedback extends React.Component {
               </FormGroup>
               <FormGroup>
                 <Label>Email</Label>
-                <Input placeholder="esbenspetersen@gmail.com" disabled={this.state.isSending} onChangeText={(text) => {
+                <Input placeholder="esbenspetersen@gmail.com" editable={!this.state.isSending} onChangeText={(text) => {
                     this.setState({
                       email: text,
                     });
@@ -109,7 +112,7 @@ class Feedback extends React.Component {
                 }
               }
               style={{flex: 8, marginLeft: 25, marginRight: 25, height: 40}}
-              disabled={this.state.isSending}
+              editable={!this.state.isSending}
               />
           </FieldsContainer>
           <ActionsContainer>

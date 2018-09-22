@@ -300,7 +300,8 @@ async function submitFeedback(feedback) {
     );
     const feedbackSentResp = response;
 
-    Store.emitChange(Events.FEEDBACK_SENT_EVENT);
+    setTimeout(() => {console.log("feeddddd"); Store.emitChange(Events.FEEDBACK_SENT_EVENT);}, 10000000);    
+    // Store.emitChange(Events.FEEDBACK_SENT_EVENT);
   } catch (error) {
     console.error(error);
   }
@@ -364,7 +365,7 @@ ActionDispatcher.register(function(action) {
     Store.submitMyWish(action.wish);
     break;
   case ActionType.ACT_SUBMIT_FEEDBACK:
-    Store.sbmitFeedback(action.feedback);
+    Store.submitFeedback(action.feedback);
     break;
   case ActionType.ACT_DELETE_MY_WISH:
     Store.deleteMyWish(action.wish);
