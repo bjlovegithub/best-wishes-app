@@ -14,4 +14,5 @@ module.exports = keyMirror({
   ACT_DELETE_MY_WISH: null,
   ACT_CLEAR_WISH_IN_EDITOR: null,
   ACT_CONFIRM_CANCEL_IN_EDITOR: null,
+  ACT_VERIFY_GOOGLE_ID_TOKEN: null,
 });

@@ -46,14 +46,22 @@ class Login extends React.Component {
     this.setState(AuthStore.getAuthInfo());
   }
 
+  verifyGoogleIdToken(token) {
+    Actions.verifyGoogleIdToken(token);
+  }
+
   async googleSignIn() {
     console.log(GOOGLE_IOS_CLIENT_ID);
 
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      const isValidToken = await this.verifyGoogleIdToken(userInfo.idToken);
       Actions.saveAuthToken(userInfo, "google-auth-token");
     } catch (error) {
+      console.log(error);
+      /*
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
@@ -63,6 +71,7 @@ class Login extends React.Component {
       } else {
         // some other error happened
       }
+      */
     }    
     /*
     try {

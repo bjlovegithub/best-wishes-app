@@ -176,12 +176,16 @@ var Store = assign({}, EventEmitter.prototype, {
   removeChangeListener(callbackInfo) {
     this.removeListener(callbackInfo.type, callbackInfo.callback);
   },
+
+  verifyGoogleIdToken(token) {
+    return verifyGoogleIdToken(token);
+  }
 });
 
 async function fetchBoardWish() {
   try {
     const response = await fetch(
-      'http://localhost:9999/board_wish/', {
+      'http://localhost:9999/board_wish', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -330,6 +334,29 @@ async function deleteMyWish(wish) {
   }
 }
 
+async function verifyGoogleIdToken(idToken) {
+  try {
+    const response = await fetch(
+      'http://localhost:9999/verify_google_id_token', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({idToken: idToken}),
+      }
+    );
+  
+    if (response.ok) {
+      myWish = myWish.filter(i => i.id !== wish.id);
+    }
+    
+    // Store.emitChange(Events.MYWISH_DELETED_EVENT);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 function clearWishInEditor() {
   myWishForUpdate = undefined;
 }
@@ -375,6 +402,9 @@ ActionDispatcher.register(function(action) {
     break;
   case ActionType.ACT_CONFIRM_CANCEL_IN_EDITOR:
     Store.confirmCancel();
+    break;
+  case ActionType.ACT_VERIFY_GOOGLE_ID_TOKEN:
+    Store.verifyGoogleIdToken(action.idToken);
     break;
   default:
     console.log("Unknown action for AuthStore: " + action.type);
