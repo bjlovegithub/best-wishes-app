@@ -83,6 +83,12 @@ var Actions = {
       type: ActionType.ACT_VERIFY_GOOGLE_ID_TOKEN,
       idToken: token,
     });
+  },
+
+  loginFailed: function() {
+    ActionDispatcher.dispatch({
+      type: ActionType.ACT_LOGIN_FAILED,
+    });
   }
 };
 

@@ -2,11 +2,13 @@
 
 import React from 'react';
 import {
-  View, Image, TouchableOpacity
+  View, Image, TouchableOpacity, Text
 } from 'react-native';
 import { Button } from 'react-native-elements';
 
 import { GoogleSignin } from 'react-native-google-signin';
+
+import DialogManager, { ScaleAnimation, DialogContent } from 'react-native-dialog-component';
 
 import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
@@ -58,7 +60,10 @@ class Login extends React.Component {
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);
       const isValidToken = await this.verifyGoogleIdToken(userInfo.idToken);
-      Actions.saveAuthToken(userInfo, "google-auth-token");
+      if (isValidToken == true)
+        Actions.saveAuthToken(userInfo, "google-auth-token");
+      else
+        Actions.loginFailed();
     } catch (error) {
       console.log(error);
       /*
@@ -103,7 +108,26 @@ class Login extends React.Component {
   }
 
   render() {
-    if (this.state.isLogin) {
+    if (this.state.loginFailed) {
+      return DialogManager.show({
+        title: 'Dialog',
+        titleAlign: 'center',
+        animationDuration: 200,
+        ScaleAnimation: new ScaleAnimation(),
+        children: (
+          <DialogContent>
+            <View>
+              <Text>
+                React Native Dialog Component
+              </Text>
+            </View>
+          </DialogContent>
+        ),
+      }, () => {
+        console.log('callback - show');
+      });      
+    }
+    else if (this.state.isLogin) {
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Image
@@ -132,7 +156,6 @@ class Login extends React.Component {
         </View>
       );
     }
-
   }
 }
 

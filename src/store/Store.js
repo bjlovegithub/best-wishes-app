@@ -74,7 +74,15 @@ var Store = assign({}, EventEmitter.prototype, {
     auth = {
       isLogin: true, picUrl: tokenInfo.user.photo,
       name: tokenInfo.user.name, user_email: tokenInfo.user.email,
-      token: tokenInfo.accessToken
+      token: tokenInfo.accessToken, loginFailed: false,
+    };
+
+    this.emitChange(Events.AUTH_EVENT);
+  },
+
+  loginFailed() {
+    auth = {
+      isLogin: false, loginFailed: true,
     };
 
     this.emitChange(Events.AUTH_EVENT);
@@ -347,11 +355,10 @@ async function verifyGoogleIdToken(idToken) {
       }
     );
   
-    if (response.ok) {
-      myWish = myWish.filter(i => i.id !== wish.id);
-    }
-    
-    // Store.emitChange(Events.MYWISH_DELETED_EVENT);
+    if (response.status == 200)
+      return true;
+    else
+      return false;
   } catch (error) {
     console.error(error);
   }
@@ -405,6 +412,9 @@ ActionDispatcher.register(function(action) {
     break;
   case ActionType.ACT_VERIFY_GOOGLE_ID_TOKEN:
     Store.verifyGoogleIdToken(action.idToken);
+    break;
+  case ActionType.ACT_LOGIN_FAILED:
+    Store.loginFailed();
     break;
   default:
     console.log("Unknown action for AuthStore: " + action.type);
