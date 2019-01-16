@@ -32,16 +32,28 @@ class Login extends React.Component {
     this.googleSignIn = this.googleSignIn.bind(this);
     this.googleSignOut = this.googleSignOut.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onVerified = this.onVerified.bind(this);
   }
 
   componentDidMount() {
     AuthStore.addChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
+    AuthStore.addChangeListener({"type": Events.GOOGLE_ID_VERIFIED_EVENT, "callback": this.onVerified});
 
     Actions.loadAuthToken();
   }
 
   componentWillUnmount() {
     AuthStore.removeChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
+  }
+
+  onVerified() {
+    // callback function for verifyGoogleIdToken()
+    const auth = AuthStore.getAuthInfo();
+
+    if (auth.googleIdVerified == true)
+      Actions.saveAuthToken(auth.googleUserInfo, "google-auth-token");
+    else
+      Actions.loginFailed();
   }
 
   onChange() {
@@ -59,11 +71,7 @@ class Login extends React.Component {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);
-      const isValidToken = await this.verifyGoogleIdToken(userInfo.idToken);
-      if (isValidToken == true)
-        Actions.saveAuthToken(userInfo, "google-auth-token");
-      else
-        Actions.loginFailed();
+      this.verifyGoogleIdToken(userInfo);
     } catch (error) {
       console.log(error);
       /*

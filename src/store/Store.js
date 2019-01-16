@@ -186,7 +186,7 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   verifyGoogleIdToken(token) {
-    return verifyGoogleIdToken(token);
+    verifyGoogleIdToken(token);
   }
 });
 
@@ -342,7 +342,8 @@ async function deleteMyWish(wish) {
   }
 }
 
-async function verifyGoogleIdToken(idToken) {
+async function verifyGoogleIdToken(userInfo) {
+  const idToken = userInfo.idToken;
   try {
     const response = await fetch(
       'http://localhost:9999/verify_google_id_token', {
@@ -354,11 +355,13 @@ async function verifyGoogleIdToken(idToken) {
         body: JSON.stringify({idToken: idToken}),
       }
     );
+
+    console.log(response);
   
-    if (response.status == 200)
-      return true;
-    else
-      return false;
+    auth.googleIdVerified = response.status == 200;
+    auth.googleUserInfo = userInfo;
+
+    Store.emitChange(Events.GOOGLE_ID_VERIFIED_EVENT);
   } catch (error) {
     console.error(error);
   }
