@@ -19,6 +19,8 @@ var myWish = [];
 
 var submitSuccessful = true;
 
+var feedbackSentResp = {};
+
 // for update my wish.
 var myWishForUpdate = undefined;
 
@@ -72,7 +74,15 @@ var Store = assign({}, EventEmitter.prototype, {
     auth = {
       isLogin: true, picUrl: tokenInfo.user.photo,
       name: tokenInfo.user.name, user_email: tokenInfo.user.email,
-      token: tokenInfo.accessToken
+      token: tokenInfo.accessToken, loginFailed: false,
+    };
+
+    this.emitChange(Events.AUTH_EVENT);
+  },
+
+  loginFailed() {
+    auth = {
+      isLogin: false, loginFailed: true,
     };
 
     this.emitChange(Events.AUTH_EVENT);
@@ -127,6 +137,10 @@ var Store = assign({}, EventEmitter.prototype, {
     submitMyWish(wish);
   },
 
+  submitFeedback(feedback) {
+    submitFeedback(feedback);
+  },
+
   deleteMyWish(wish) {
     deleteMyWish(wish);
   },
@@ -141,6 +155,10 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getSubmitStatus() {
     return submitSuccessful;
+  },
+
+  getFeedbackSentResp() {
+    return feedbackSentResp;
   },
 
   getMyWish() {
@@ -166,12 +184,16 @@ var Store = assign({}, EventEmitter.prototype, {
   removeChangeListener(callbackInfo) {
     this.removeListener(callbackInfo.type, callbackInfo.callback);
   },
+
+  verifyGoogleIdToken(token) {
+    verifyGoogleIdToken(token);
+  }
 });
 
 async function fetchBoardWish() {
   try {
     const response = await fetch(
-      'http://localhost:9999/board_wish/', {
+      'http://localhost:9999/board_wish', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -276,6 +298,27 @@ async function submitMyWish(wish) {
   }
 }
 
+async function submitFeedback(feedback) {
+  try {
+    const response = await fetch(
+      'http://localhost:9999/feedback/' , {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(feedback),
+      }
+    );
+    const feedbackSentResp = response;
+
+    setTimeout(() => {console.log("feeddddd"); Store.emitChange(Events.FEEDBACK_SENT_EVENT);}, 10000000);    
+    // Store.emitChange(Events.FEEDBACK_SENT_EVENT);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function deleteMyWish(wish) {
   try {
     const response = await fetch(
@@ -294,6 +337,31 @@ async function deleteMyWish(wish) {
     }
     
     Store.emitChange(Events.MYWISH_DELETED_EVENT);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function verifyGoogleIdToken(userInfo) {
+  const idToken = userInfo.idToken;
+  try {
+    const response = await fetch(
+      'http://localhost:9999/verify_google_id_token', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({idToken: idToken}),
+      }
+    );
+
+    console.log(response);
+  
+    auth.googleIdVerified = response.status == 200;
+    auth.googleUserInfo = userInfo;
+
+    Store.emitChange(Events.GOOGLE_ID_VERIFIED_EVENT);
   } catch (error) {
     console.error(error);
   }
@@ -333,6 +401,9 @@ ActionDispatcher.register(function(action) {
   case ActionType.ACT_SUBMIT_MY_WISH:
     Store.submitMyWish(action.wish);
     break;
+  case ActionType.ACT_SUBMIT_FEEDBACK:
+    Store.submitFeedback(action.feedback);
+    break;
   case ActionType.ACT_DELETE_MY_WISH:
     Store.deleteMyWish(action.wish);
     break;
@@ -341,6 +412,12 @@ ActionDispatcher.register(function(action) {
     break;
   case ActionType.ACT_CONFIRM_CANCEL_IN_EDITOR:
     Store.confirmCancel();
+    break;
+  case ActionType.ACT_VERIFY_GOOGLE_ID_TOKEN:
+    Store.verifyGoogleIdToken(action.idToken);
+    break;
+  case ActionType.ACT_LOGIN_FAILED:
+    Store.loginFailed();
     break;
   default:
     console.log("Unknown action for AuthStore: " + action.type);

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-  View, Image, TouchableOpacity
+  View, Image, TouchableOpacity, Text, Alert
 } from 'react-native';
 import { Button } from 'react-native-elements';
 
@@ -30,10 +30,12 @@ class Login extends React.Component {
     this.googleSignIn = this.googleSignIn.bind(this);
     this.googleSignOut = this.googleSignOut.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onVerified = this.onVerified.bind(this);
   }
 
   componentDidMount() {
     AuthStore.addChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
+    AuthStore.addChangeListener({"type": Events.GOOGLE_ID_VERIFIED_EVENT, "callback": this.onVerified});
 
     Actions.loadAuthToken();
   }
@@ -42,8 +44,22 @@ class Login extends React.Component {
     AuthStore.removeChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
   }
 
+  onVerified() {
+    // callback function for verifyGoogleIdToken()
+    const auth = AuthStore.getAuthInfo();
+
+    if (auth.googleIdVerified == true)
+      Actions.saveAuthToken(auth.googleUserInfo, "google-auth-token");
+    else
+      Actions.loginFailed();
+  }
+
   onChange() {
     this.setState(AuthStore.getAuthInfo());
+  }
+
+  verifyGoogleIdToken(token) {
+    Actions.verifyGoogleIdToken(token);
   }
 
   async googleSignIn() {
@@ -52,8 +68,11 @@ class Login extends React.Component {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      Actions.saveAuthToken(userInfo, "google-auth-token");
+      console.log(userInfo);
+      this.verifyGoogleIdToken(userInfo);
     } catch (error) {
+      console.log(error);
+      /*
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
@@ -63,6 +82,7 @@ class Login extends React.Component {
       } else {
         // some other error happened
       }
+      */
     }    
     /*
     try {
@@ -112,6 +132,17 @@ class Login extends React.Component {
       );
     }
     else {
+      if (this.state.loginFailed) {
+        Alert.alert(
+          'Error',
+          'Google Authentication Failed',
+          [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          { cancelable: false }
+        );
+      }
+
       return (
         <View style={styles.buttonView}>
           <TouchableOpacity onPress={this.googleSignIn}>
@@ -123,7 +154,6 @@ class Login extends React.Component {
         </View>
       );
     }
-
   }
 }
 

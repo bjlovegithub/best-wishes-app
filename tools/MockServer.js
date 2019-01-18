@@ -151,6 +151,11 @@ router.put('/my_wish/', function (req, res) {
   res.send({status: 'OK'});
 });
 
+router.put('/feedback/', function (req, res) {
+  console.log(req.body);
+  res.send({status: 'OK'});
+});
+
 router.delete('/my_wish/:id', function (req, res) {
   res.send({status: 'OK'});  
 });

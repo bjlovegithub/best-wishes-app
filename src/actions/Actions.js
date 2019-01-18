@@ -52,6 +52,13 @@ var Actions = {
     });
   },
 
+  submitFeedback: function(feedback) {
+    ActionDispatcher.dispatch({
+      type: ActionType.ACT_SUBMIT_FEEDBACK,
+      feedback: feedback,
+    });
+  },
+
   deleteMyWish: function(wish) {
     ActionDispatcher.dispatch({
       type: ActionType.ACT_DELETE_MY_WISH,
@@ -68,6 +75,19 @@ var Actions = {
   confirmCancelEdit: function() {
     ActionDispatcher.dispatch({
       type: ActionType.ACT_CONFIRM_CANCEL_IN_EDITOR,
+    });
+  },
+
+  verifyGoogleIdToken: function(token) {
+    ActionDispatcher.dispatch({
+      type: ActionType.ACT_VERIFY_GOOGLE_ID_TOKEN,
+      idToken: token,
+    });
+  },
+
+  loginFailed: function() {
+    ActionDispatcher.dispatch({
+      type: ActionType.ACT_LOGIN_FAILED,
     });
   }
 };
