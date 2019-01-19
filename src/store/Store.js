@@ -65,6 +65,11 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   saveAuthToken(tokenInfo) {
+    // the input parameter tokenInfo contains:
+    //   - googleIdVerified
+    //   - googleUserInfo: response from google api
+    //   - jwt: jwt from backend server
+
     storage.save({
       key: 'google-auth-token',
       id: '',
@@ -72,9 +77,11 @@ var Store = assign({}, EventEmitter.prototype, {
     });
 
     auth = {
-      isLogin: true, picUrl: tokenInfo.user.photo,
-      name: tokenInfo.user.name, user_email: tokenInfo.user.email,
-      token: tokenInfo.accessToken, loginFailed: false,
+      isLogin: true, picUrl: tokenInfo.googleUserInfo.user.photo,
+      name: tokenInfo.googleUserInfo.user.name,
+      user_email: tokenInfo.googleUserInfo.user.email,
+      token: tokenInfo.googleUserInfo.accessToken,
+      loginFailed: false, jwt: tokenInfo.jwt
     };
 
     this.emitChange(Events.AUTH_EVENT);
@@ -97,7 +104,7 @@ var Store = assign({}, EventEmitter.prototype, {
     }).then(ret => {
       auth = {
         isLogin: true, picUrl: ret.user.photo,
-        name: ret.user.name, token: ret.accessToken
+        name: ret.user.name, token: ret.accessToken, jwt: ret.jwt
       };
       this.emitChange(Events.AUTH_EVENT);
     }).catch(err => {
@@ -221,6 +228,7 @@ async function getData(id) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: auth.jwt,
         }
       }
     );
@@ -259,6 +267,7 @@ async function updateThumbs(id) {
 }
 
 async function loadMyWish() {
+  console.log(auth);
   try {
     const response = await fetch(
       'http://localhost:9999/my_wish/' + auth.user_id, {
@@ -266,6 +275,7 @@ async function loadMyWish() {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: auth.jwt,
         }
       }
     );
@@ -356,10 +366,11 @@ async function verifyGoogleIdToken(userInfo) {
       }
     );
 
-    console.log(response);
+    const body = await response.json();
   
-    auth.googleIdVerified = response.status == 200;
+    auth.googleIdVerified = response.status == 200 && body.ok == true;
     auth.googleUserInfo = userInfo;
+    auth.jwt = body.token;
 
     Store.emitChange(Events.GOOGLE_ID_VERIFIED_EVENT);
   } catch (error) {
