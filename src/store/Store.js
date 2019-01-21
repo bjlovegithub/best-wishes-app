@@ -81,7 +81,7 @@ var Store = assign({}, EventEmitter.prototype, {
       name: tokenInfo.googleUserInfo.user.name,
       user_email: tokenInfo.googleUserInfo.user.email,
       token: tokenInfo.googleUserInfo.accessToken,
-      loginFailed: false, jwt: tokenInfo.jwt
+      loginFailed: false, jwt: tokenInfo.jwt, user_id: tokenInfo.user_id
     };
 
     this.emitChange(Events.AUTH_EVENT);
@@ -103,7 +103,7 @@ var Store = assign({}, EventEmitter.prototype, {
       syncInBackground: true,
     }).then(ret => {
       auth = {
-        isLogin: true, picUrl: ret.user.photo,
+        isLogin: true, picUrl: ret.user.photo, user_id: ret.user_id,
         name: ret.user.name, token: ret.accessToken, jwt: ret.jwt
       };
       this.emitChange(Events.AUTH_EVENT);
@@ -279,10 +279,16 @@ async function loadMyWish() {
         }
       }
     );
-    const data = await response.json();
-    myWish = data;
 
-    Store.emitChange(Events.MYWISH_LOADED_EVENT);
+    if (response.ok) {
+      const data = await response.json();
+      myWish = data;
+
+      Store.emitChange(Events.MYWISH_LOADED_EVENT);
+    }
+    else {
+      // TODO - Handle loading my wish error.
+    }
   } catch (error) {
     console.error(error);
   }
@@ -371,6 +377,7 @@ async function verifyGoogleIdToken(userInfo) {
     auth.googleIdVerified = response.status == 200 && body.ok == true;
     auth.googleUserInfo = userInfo;
     auth.jwt = body.token;
+    auth.user_id = body.user_id;
 
     Store.emitChange(Events.GOOGLE_ID_VERIFIED_EVENT);
   } catch (error) {

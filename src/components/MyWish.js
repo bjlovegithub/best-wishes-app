@@ -83,7 +83,7 @@ class MyWish extends React.Component {
 
   render() {
     const { wish } = this.state;
-    
+
     var wishArr = [];
 
   	for(let i = 0; i < wish.length; i++) {
