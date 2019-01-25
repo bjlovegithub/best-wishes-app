@@ -103,8 +103,8 @@ var Store = assign({}, EventEmitter.prototype, {
       syncInBackground: true,
     }).then(ret => {
       auth = {
-        isLogin: true, picUrl: ret.user.photo, user_id: ret.user_id,
-        name: ret.user.name, token: ret.accessToken, jwt: ret.jwt
+        isLogin: true, picUrl: ret.googleUserInfo.user.photo, user_id: ret.user_id,
+        name: ret.googleUserInfo.user.name, token: ret.accessToken, jwt: ret.jwt
       };
       this.emitChange(Events.AUTH_EVENT);
     }).catch(err => {
@@ -228,7 +228,7 @@ async function getData(id) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: auth.jwt,
+          Authorization: formBearHeader(auth.jwt),
         }
       }
     );
@@ -267,7 +267,6 @@ async function updateThumbs(id) {
 }
 
 async function loadMyWish() {
-  console.log(auth);
   try {
     const response = await fetch(
       'http://localhost:9999/my_wish/' + auth.user_id, {
@@ -275,7 +274,7 @@ async function loadMyWish() {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: auth.jwt,
+          Authorization: formBearHeader(auth.jwt),
         }
       }
     );
@@ -287,7 +286,10 @@ async function loadMyWish() {
       Store.emitChange(Events.MYWISH_LOADED_EVENT);
     }
     else {
-      // TODO - Handle loading my wish error.
+      const msg = await response.text();
+      console.log(msg);
+      myWish = {wish: [], error: msg, failed: true};
+      Store.emitChange(Events.MYWISH_LOADED_EVENT);
     }
   } catch (error) {
     console.error(error);
@@ -387,6 +389,10 @@ async function verifyGoogleIdToken(userInfo) {
 
 function clearWishInEditor() {
   myWishForUpdate = undefined;
+}
+
+function formBearHeader(jwt) {
+  return "Bearer " + jwt;
 }
 
 ActionDispatcher.register(function(action) {

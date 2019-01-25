@@ -84,6 +84,17 @@ class MyWish extends React.Component {
   render() {
     const { wish } = this.state;
 
+    if (wish.failed == true) {
+      Alert.alert(
+        'Error',
+        wish.error,
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        { cancelable: false }
+      );
+    }
+
     var wishArr = [];
 
   	for(let i = 0; i < wish.length; i++) {
