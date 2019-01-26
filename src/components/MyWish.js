@@ -11,6 +11,7 @@ import Swipeout from 'react-native-swipeout';
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
+import ErrorType from '../common/ErrorType';
 import {getDate} from '../common/Util';
 
 import styles from '../styles/MyWish';
@@ -83,16 +84,28 @@ class MyWish extends React.Component {
 
   render() {
     const { wish } = this.state;
+    const actionState = Store.getLastActionInfo();
 
-    if (wish.failed == true) {
-      Alert.alert(
-        'Error',
-        wish.error,
-        [
-          {text: 'OK', onPress: () => this.props.navigation.navigate('Login')},
-        ],
-        { cancelable: false }
-      );
+    if (actionState.failed == true) {
+      if (actionState.type == ErrorType.ERR_AUTH_FAILED) {
+        Alert.alert(
+          'Error',
+          actionState.error,
+          [
+            {text: 'OK', onPress: () => this.props.navigation.navigate('Login')},
+          ],
+          { cancelable: false }
+        );
+      } else {
+        Alert.alert(
+          'Error',
+          actionState.error,
+          [
+            {text: 'OK', onPress: () => {}},
+          ],
+          { cancelable: false }
+        );
+      }
     }
 
     var wishArr = [];

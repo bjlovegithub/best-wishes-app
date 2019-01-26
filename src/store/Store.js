@@ -6,6 +6,7 @@ import assign from 'object-assign';
 import ActionDispatcher from '../dispatcher/ActionDispatcher';
 import ActionType from '../common/ActionType';
 import Events from '../common/Events';
+import ErrorType from '../common/ErrorType';
 
 import Storage from 'react-native-storage';
 import { AsyncStorage } from 'react-native';
@@ -18,6 +19,9 @@ var wishMap = {};
 var myWish = [];
 
 var submitSuccessful = true;
+
+// keep the info from latest action
+var lastActionInfo = {};
 
 var feedbackSentResp = {};
 
@@ -134,6 +138,10 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getAuthInfo() {
     return auth;
+  },
+
+  getLastActionInfo() {
+    return lastActionInfo;
   },
 
   loadMyWish() {
@@ -286,9 +294,10 @@ async function loadMyWish() {
       Store.emitChange(Events.MYWISH_LOADED_EVENT);
     }
     else {
-      const msg = await response.text();
-      console.log(msg);
-      myWish = {wish: [], error: msg, failed: true};
+      // TODO - May have to distinguish error types, such as login failed, etc.
+      const m = await response.json();
+      myWish = {wish: []};
+      lastActionInfo = {error: m.message, failed: true, type: getErrorType(m.type)};
       Store.emitChange(Events.MYWISH_LOADED_EVENT);
     }
   } catch (error) {
@@ -345,13 +354,16 @@ async function deleteMyWish(wish) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: formBearHeader(auth.jwt),
         },
       }
     );
-
   
     if (response.ok) {
       myWish = myWish.filter(i => i.id !== wish.id);
+    } else {
+      const m = await response.json();
+      lastActionInfo = {error: m.message, failed: true, type: getErrorType(m.type)};
     }
     
     Store.emitChange(Events.MYWISH_DELETED_EVENT);
@@ -393,6 +405,15 @@ function clearWishInEditor() {
 
 function formBearHeader(jwt) {
   return "Bearer " + jwt;
+}
+
+function getErrorType(code) {
+  switch(code) {
+  case 1:
+    return ErrorType.ERR_AUTH_FAILED;
+  default:
+    return ErrorType.ERR_UNKNOWN;
+  }
 }
 
 ActionDispatcher.register(function(action) {
