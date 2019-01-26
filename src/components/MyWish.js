@@ -89,7 +89,7 @@ class MyWish extends React.Component {
         'Error',
         wish.error,
         [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
+          {text: 'OK', onPress: () => this.props.navigation.navigate('Login')},
         ],
         { cancelable: false }
       );
