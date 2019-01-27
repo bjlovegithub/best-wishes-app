@@ -18,15 +18,13 @@ var wishMap = {};
 
 var myWish = [];
 
-var submitSuccessful = true;
+// the wish from my wish list which will be updated
+var myWishForUpdate = null;
 
 // keep the info from latest action
 var lastActionInfo = {};
 
 var feedbackSentResp = {};
-
-// for update my wish.
-var myWishForUpdate = undefined;
 
 // internal storage
 var storage = new Storage({
@@ -168,10 +166,6 @@ var Store = assign({}, EventEmitter.prototype, {
     Store.emitChange(Events.CONFIRM_CANCEL_EVENT);
   },
 
-  getSubmitStatus() {
-    return submitSuccessful;
-  },
-
   getFeedbackSentResp() {
     return feedbackSentResp;
   },
@@ -290,6 +284,7 @@ async function loadMyWish() {
     if (response.ok) {
       const data = await response.json();
       myWish = data;
+      lastActionInfo = {};
 
       Store.emitChange(Events.MYWISH_LOADED_EVENT);
     }
@@ -306,18 +301,26 @@ async function loadMyWish() {
 }
 
 async function submitMyWish(wish) {
+  console.log(wish);
   try {
     const response = await fetch(
-      'http://localhost:9999/my_wish/' , {
+      'http://localhost:9999/wish/', {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: formBearHeader(auth.jwt),
         },
         body: JSON.stringify(wish),
       }
     );
-    const submitSuccessful = response.ok;
+
+    if (response.ok) {
+      lastActionInfo = {};
+    } else {
+      const m = await response.json();
+      lastActionInfo = {error: m.message, failed: true, type: getErrorType(m.type)};
+    }
 
     Store.emitChange(Events.MYWISH_SAVED_EVENT);
   } catch (error) {
@@ -349,7 +352,7 @@ async function submitFeedback(feedback) {
 async function deleteMyWish(wish) {
   try {
     const response = await fetch(
-      'http://localhost:9999/my_wish/' + wish.id , {
+      'http://localhost:9999/wish/' + wish.id , {
         method: 'DELETE',
         headers: {
           Accept: 'application/json',

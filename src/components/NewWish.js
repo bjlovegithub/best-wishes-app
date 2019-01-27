@@ -11,6 +11,7 @@ import Button from 'apsl-react-native-button';
 import Store from '../store/Store';
 import ActionType from '../common/ActionType';
 import Events from '../common/Events';
+import ErrorType from '../common/ErrorType';
 import Actions from '../actions/Actions';
 
 import styles from '../styles/NewWish';
@@ -29,18 +30,19 @@ class NewWish extends React.Component {
     if (wishForUpdate === undefined) {
       this.state = {
         wish: '', fontFamily: 'Helvetica', fontSize: 16,
-        fontColor: 'black', backgroundPic: 'pic1'
+        fontColor: 'black', backgroundPic: 'pic1', id: null
       };
     }
     else {
       this.state = {
         wish: wishForUpdate.wish, fontFamily: wishForUpdate.fontFamily,
         fontSize: wishForUpdate.fontSize, fontColor: wishForUpdate.fontColor,
-        backgroundPic: wishForUpdate.backgroundPic
+        backgroundPic: wishForUpdate.backgroundPic, id: wishForUpdate.id
       };
     }
 
     this.submit = this.submit.bind(this);
+    this.onSaved = this.onSaved.bind(this);
     this.goBack = this.goBack.bind(this);
   }
 
@@ -65,7 +67,8 @@ class NewWish extends React.Component {
   }
 
   onSaved() {
-    if (Store.getSubmitStatus()) {
+    const status = Store.getLastActionInfo();
+    if (status.failed == null) {
       Alert.alert(
         'Info',
         'Whooooo :)',
@@ -76,14 +79,20 @@ class NewWish extends React.Component {
       );
     }
     else {
-      Alert.alert(
-        'Error',
-        'Failed to save the wish...',
-        [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ],
-        { cancelable: false }
-      );
+      var func = null;
+      if (status.type == ErrorType.ERR_AUTH_FAILED) {
+        func = () => this.props.navigation.navigate('Login');
+      } else {
+        func = () => console.log("OK Pressed");
+      }
+        Alert.alert(
+          'Error',
+          status.error,
+          [
+            {text: 'OK', onPress: func},
+          ],
+          { cancelable: false }
+        );
     }
   }
 
@@ -96,6 +105,9 @@ class NewWish extends React.Component {
 
   submit() {
     Actions.submitWish(this.state);
+  }
+
+  handleSubmitResponse(status) {
   }
 
   render() {
