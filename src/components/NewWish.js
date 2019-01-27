@@ -13,6 +13,7 @@ import ActionType from '../common/ActionType';
 import Events from '../common/Events';
 import ErrorType from '../common/ErrorType';
 import Actions from '../actions/Actions';
+import {checkRequestError} from '../common/Util';
 
 import styles from '../styles/NewWish';
 
@@ -79,20 +80,7 @@ class NewWish extends React.Component {
       );
     }
     else {
-      var func = null;
-      if (status.type == ErrorType.ERR_AUTH_FAILED) {
-        func = () => this.props.navigation.navigate('Login');
-      } else {
-        func = () => console.log("OK Pressed");
-      }
-        Alert.alert(
-          'Error',
-          status.error,
-          [
-            {text: 'OK', onPress: func},
-          ],
-          { cancelable: false }
-        );
+      checkRequestError(this);
     }
   }
 

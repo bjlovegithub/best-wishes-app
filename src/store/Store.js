@@ -251,18 +251,21 @@ async function updateThumbs(id) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: formBearHeader(auth.jwt),
         },
-        body: JSON.stringify(wishMap[id])
+        body: JSON.stringify({id: wishMap[id], user_id: auth.user_id})
       }
     );
-    await response.json();
+    
+    const m = await response.json();
 
     if (response.ok) {
-      Store.emitChange(Events.THUMB_UP_EVENT);
+      lastActionInfo = {};
     }
     else {
-      console.log("Update thumbs failed: "+sid);
+      lastActionInfo = {error: m.message, failed: true, type: getErrorType(m.type)};
     }
+    Store.emitChange(Events.THUMB_UP_EVENT);    
   } catch (error) {
     console.error(error);
   }
@@ -281,18 +284,17 @@ async function loadMyWish() {
       }
     );
 
+    const data = await response.json();    
+
     if (response.ok) {
-      const data = await response.json();
       myWish = data;
       lastActionInfo = {};
 
       Store.emitChange(Events.MYWISH_LOADED_EVENT);
     }
     else {
-      // TODO - May have to distinguish error types, such as login failed, etc.
-      const m = await response.json();
       myWish = {wish: []};
-      lastActionInfo = {error: m.message, failed: true, type: getErrorType(m.type)};
+      lastActionInfo = {error: data.message, failed: true, type: getErrorType(data.type)};
       Store.emitChange(Events.MYWISH_LOADED_EVENT);
     }
   } catch (error) {
@@ -315,10 +317,11 @@ async function submitMyWish(wish) {
       }
     );
 
+    const m = await response.json();    
+
     if (response.ok) {
       lastActionInfo = {};
     } else {
-      const m = await response.json();
       lastActionInfo = {error: m.message, failed: true, type: getErrorType(m.type)};
     }
 
@@ -361,11 +364,12 @@ async function deleteMyWish(wish) {
         },
       }
     );
+
+    const m = await response.json();
   
     if (response.ok) {
       myWish = myWish.filter(i => i.id !== wish.id);
     } else {
-      const m = await response.json();
       lastActionInfo = {error: m.message, failed: true, type: getErrorType(m.type)};
     }
     
