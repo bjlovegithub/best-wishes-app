@@ -24,7 +24,8 @@ var myWishForUpdate = null;
 // keep the info from latest action
 var lastActionInfo = {};
 
-var feedbackSentResp = {};
+// track the wish where its thumbs have been updated.
+var thumbedWishId = null;
 
 // internal storage
 var storage = new Storage({
@@ -106,7 +107,8 @@ var Store = assign({}, EventEmitter.prototype, {
     }).then(ret => {
       auth = {
         isLogin: true, picUrl: ret.googleUserInfo.user.photo, user_id: ret.user_id,
-        name: ret.googleUserInfo.user.name, token: ret.accessToken, jwt: ret.jwt
+        name: ret.googleUserInfo.user.name, token: ret.accessToken, jwt: ret.jwt,
+        user_email: ret.googleUserInfo.user.email,
       };
       this.emitChange(Events.AUTH_EVENT);
     }).catch(err => {
@@ -166,10 +168,6 @@ var Store = assign({}, EventEmitter.prototype, {
     Store.emitChange(Events.CONFIRM_CANCEL_EVENT);
   },
 
-  getFeedbackSentResp() {
-    return feedbackSentResp;
-  },
-
   getMyWish() {
     return {'wish': myWish};
   },
@@ -196,7 +194,11 @@ var Store = assign({}, EventEmitter.prototype, {
 
   verifyGoogleIdToken(token) {
     verifyGoogleIdToken(token);
-  }
+  },
+
+  getThumbedWishId() {
+    return thumbedWishId;
+  },
 });
 
 async function fetchBoardWish() {
@@ -261,11 +263,12 @@ async function updateThumbs(id) {
 
     if (response.ok) {
       lastActionInfo = {};
+      wishMap[id].thumbs += 1;
     }
     else {
-      lastActionInfo = {error: m.message, failed: true, type: getErrorType(m.type)};
+      lastActionInfo = {error: m.message, failed: true, type: getErrorType(response.status)};
     }
-    Store.emitChange(Events.THUMB_UP_EVENT);    
+    Store.emitChange(Events.THUMB_UP_EVENT);
   } catch (error) {
     console.error(error);
   }
@@ -294,7 +297,7 @@ async function loadMyWish() {
     }
     else {
       myWish = {wish: []};
-      lastActionInfo = {error: data.message, failed: true, type: getErrorType(data.type)};
+      lastActionInfo = {error: data.message, failed: true, type: getErrorType(response.status)};
       Store.emitChange(Events.MYWISH_LOADED_EVENT);
     }
   } catch (error) {
@@ -322,7 +325,7 @@ async function submitMyWish(wish) {
     if (response.ok) {
       lastActionInfo = {};
     } else {
-      lastActionInfo = {error: m.message, failed: true, type: getErrorType(m.type)};
+      lastActionInfo = {error: m.message, failed: true, type: getErrorType(response.status)};
     }
 
     Store.emitChange(Events.MYWISH_SAVED_EVENT);
@@ -343,10 +346,13 @@ async function submitFeedback(feedback) {
         body: JSON.stringify(feedback),
       }
     );
-    const feedbackSentResp = response;
-
-    setTimeout(() => {console.log("feeddddd"); Store.emitChange(Events.FEEDBACK_SENT_EVENT);}, 10000000);    
-    // Store.emitChange(Events.FEEDBACK_SENT_EVENT);
+    const m = await response.json();
+    if (response.ok) {
+      lastActionInfo = {};
+    } else {
+      lastActionInfo = {error: m.message, failed: true, type: getErrorType(response.status)};
+    }
+    Store.emitChange(Events.FEEDBACK_SENT_EVENT);
   } catch (error) {
     console.error(error);
   }
@@ -370,7 +376,7 @@ async function deleteMyWish(wish) {
     if (response.ok) {
       myWish = myWish.filter(i => i.id !== wish.id);
     } else {
-      lastActionInfo = {error: m.message, failed: true, type: getErrorType(m.type)};
+      lastActionInfo = {error: m.message, failed: true, type: getErrorType(response.status)};
     }
     
     Store.emitChange(Events.MYWISH_DELETED_EVENT);
@@ -416,7 +422,9 @@ function formBearHeader(jwt) {
 
 function getErrorType(code) {
   switch(code) {
-  case 1:
+  case 400:
+    return ErrorType.ERR_BAD_REQUEST;
+  case 401:
     return ErrorType.ERR_AUTH_FAILED;
   default:
     return ErrorType.ERR_UNKNOWN;
@@ -434,7 +442,7 @@ ActionDispatcher.register(function(action) {
       // no wish loaded yet, do nothing.
     }
     else {
-      wishMap[wishId].thumbs += 1;
+      thumbedWishId = wishId;
       updateThumbs(wishId);
     }
     break;

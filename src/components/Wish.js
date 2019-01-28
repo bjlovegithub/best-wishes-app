@@ -47,8 +47,10 @@ class Wish extends React.Component {
 
   render() {
     // check request error
-    checkRequestError(this);
-    
+    if (Store.getThumbedWishId() == this.state.id)
+      checkRequestError(this);
+
+    console.log(this.state);
     const { wish, fontFamily, fontSize, fontColor, thumbs, createdTimestamp } = this.state;
     const fontStyle = {
       fontSize: fontSize, color: fontColor,
