@@ -70,6 +70,7 @@ class NewWish extends React.Component {
   onSaved() {
     const status = Store.getLastActionInfo();
     if (status.failed == null) {
+      this.props.navigation.setParams({isEditing: false});
       Alert.alert(
         'Info',
         'Whooooo :)',
