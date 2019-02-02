@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-  Text, View, Image, TouchableOpacity, ImageBackground, TextInput
+  Text, View, Image, TouchableOpacity, ImageBackground, TextInput, Alert
 } from 'react-native';
 
 import {
@@ -20,12 +20,9 @@ import {
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
-import {getDate} from '../common/Util';
+import {getDate, checkRequestError} from '../common/Util';
 
 import styles from '../styles/Feedback';
-
-const ThumbupBackground = require('../../assets/botton_background.jpg');
-const ThumbupLogo = require('../../assets/thumbs-up-sign_1f44d.png');
 
 const countryOptions = [
   {label: 'Denmark', value: 'DK'},
@@ -37,10 +34,13 @@ class Feedback extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {name: "", email: "", message: "", isSending: false};
+    const auth = Store.getAuthInfo();
+    this.state = {
+      name: auth.name, email: auth.user_email,
+      message: "", isSending: false
+    };
 
     this.onChange = this.onChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -57,13 +57,18 @@ class Feedback extends React.Component {
   }
 
   onChange() {
-    const resp = Store.getFeedbackSentResp();
-    console.log(resp);
+    const status = Store.getLastActionInfo();
+    if (status.failed != true) {
+      Alert.alert(
+        'Info',
+        'Thanks for your feedback :)',
+        [
+          {text: 'OK', onPress: () => {}},
+        ],
+        { cancelable: false }
+      );
+    }
     this.setState({isSending: false});
-  }
-
-  handleClick() {
-    Actions.thumbUp(this.state.id);
   }
 
   onSubmit() {
@@ -73,6 +78,8 @@ class Feedback extends React.Component {
   }
 
   render() {
+    checkRequestError(this);
+    
     const { handleSubmit, submitting } = this.props;
 
     var button;
@@ -88,7 +95,7 @@ class Feedback extends React.Component {
             <Fieldset label="Contact details">
               <FormGroup>
                 <Label>Name</Label>
-                <Input placeholder="Esben" editable={!this.state.isSending} onChangeText={(text) => {
+                <Input placeholder={this.state.name} editable={!this.state.isSending} onChangeText={(text) => {
                     this.setState({
                       name: text,
                     });
@@ -96,7 +103,7 @@ class Feedback extends React.Component {
               </FormGroup>
               <FormGroup>
                 <Label>Email</Label>
-                <Input placeholder="esbenspetersen@gmail.com" editable={!this.state.isSending} onChangeText={(text) => {
+                <Input placeholder={this.state.email} editable={!this.state.isSending} onChangeText={(text) => {
                     this.setState({
                       email: text,
                     });

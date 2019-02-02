@@ -69,11 +69,12 @@ RootStack.router.getStateForAction = (action, state) => {
     console.log("have to confirm it!");
     Alert.alert(
       'Info',
-      'Whooooo :)',
+      'Will lose the wish! Are you sure want to leave editing?',
       [
         {text: 'OK', onPress: () => Actions.confirmCancelEdit()},
+        {text: 'CANCEL', onPress: () => {}},
       ],
-      { cancelable: false }
+      { cancelable: true }
     );
     return null;
   }

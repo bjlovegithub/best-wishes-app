@@ -8,7 +8,7 @@ import {
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
-import {getDate} from '../common/Util';
+import {getDate, checkRequestError} from '../common/Util';
 
 import styles from '../styles/Wish';
 
@@ -46,6 +46,11 @@ class Wish extends React.Component {
   }
 
   render() {
+    // check request error
+    if (Store.getThumbedWishId() == this.state.id)
+      checkRequestError(this);
+
+    console.log(this.state);
     const { wish, fontFamily, fontSize, fontColor, thumbs, createdTimestamp } = this.state;
     const fontStyle = {
       fontSize: fontSize, color: fontColor,

@@ -49,7 +49,7 @@ class Login extends React.Component {
     const auth = AuthStore.getAuthInfo();
 
     if (auth.googleIdVerified == true)
-      Actions.saveAuthToken(auth.googleUserInfo, "google-auth-token");
+      Actions.saveAuthToken(auth, "google-auth-token");
     else
       Actions.loginFailed();
   }

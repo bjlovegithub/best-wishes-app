@@ -11,7 +11,7 @@ import Swipeout from 'react-native-swipeout';
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
-import {getDate} from '../common/Util';
+import {getDate, checkRequestError} from '../common/Util';
 
 import styles from '../styles/MyWish';
 
@@ -82,8 +82,9 @@ class MyWish extends React.Component {
   }
 
   render() {
-    const { wish } = this.state;
-    
+    checkRequestError(this);
+
+    const { wish } = this.state;    
     var wishArr = [];
 
   	for(let i = 0; i < wish.length; i++) {

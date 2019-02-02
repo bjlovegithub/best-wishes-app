@@ -53,7 +53,7 @@ class Board extends React.Component {
              }}
              key={prop}
              >
-            <Wish wish={wishes[prop]} style={styles.wish} />
+            <Wish wish={wishes[prop]} style={styles.wish} navigation={this.props.screenProps.rootNavigation}/>
           </ImageBackground>
         );
       }
