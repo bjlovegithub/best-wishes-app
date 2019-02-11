@@ -86,6 +86,7 @@ var Store = assign({}, EventEmitter.prototype, {
       token: tokenInfo.googleUserInfo.accessToken,
       loginFailed: false, jwt: tokenInfo.jwt, user_id: tokenInfo.user_id
     };
+    console.log("User-------------------------Id:" + tokenInfo.user_id);
 
     this.emitChange(Events.AUTH_EVENT);
   },
@@ -110,6 +111,7 @@ var Store = assign({}, EventEmitter.prototype, {
         name: ret.googleUserInfo.user.name, token: ret.accessToken, jwt: ret.jwt,
         user_email: ret.googleUserInfo.user.email,
       };
+      console.log("User.......................Id:" + auth.user_id);
       this.emitChange(Events.AUTH_EVENT);
     }).catch(err => {
       switch (err.name) {
@@ -233,6 +235,7 @@ async function getData(id) {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,
         }
       }
     );
@@ -254,6 +257,7 @@ async function updateThumbs(id) {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,          
         },
         body: JSON.stringify({id: wishMap[id], user_id: auth.user_id})
       }
@@ -283,6 +287,7 @@ async function loadMyWish() {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,          
         }
       }
     );
@@ -315,6 +320,7 @@ async function submitMyWish(wish) {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,
         },
         body: JSON.stringify(wish),
       }
@@ -367,6 +373,7 @@ async function deleteMyWish(wish) {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,          
         },
       }
     );
