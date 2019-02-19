@@ -86,14 +86,13 @@ var Store = assign({}, EventEmitter.prototype, {
       token: tokenInfo.googleUserInfo.accessToken,
       loginFailed: false, jwt: tokenInfo.jwt, user_id: tokenInfo.user_id
     };
-    console.log("User-------------------------Id:" + tokenInfo.user_id);
 
     this.emitChange(Events.AUTH_EVENT);
   },
 
   loginFailed() {
     auth = {
-      isLogin: false, loginFailed: true,
+      isLogin: false, loginFailed: true, message: auth.message
     };
 
     this.emitChange(Events.AUTH_EVENT);
@@ -111,7 +110,6 @@ var Store = assign({}, EventEmitter.prototype, {
         name: ret.googleUserInfo.user.name, token: ret.accessToken, jwt: ret.jwt,
         user_email: ret.googleUserInfo.user.email,
       };
-      console.log("User.......................Id:" + auth.user_id);
       this.emitChange(Events.AUTH_EVENT);
     }).catch(err => {
       switch (err.name) {
@@ -122,6 +120,10 @@ var Store = assign({}, EventEmitter.prototype, {
       default:
         console.warn(err.message);
       }
+      auth = {
+        isLogin: false,
+      };
+      this.emitChange(Events.AUTH_EVENT);
     });
   },
 
@@ -311,7 +313,6 @@ async function loadMyWish() {
 }
 
 async function submitMyWish(wish) {
-  console.log(wish);
   try {
     const response = await fetch(
       'http://localhost:9999/wish/', {
@@ -348,6 +349,8 @@ async function submitFeedback(feedback) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,
         },
         body: JSON.stringify(feedback),
       }
@@ -373,7 +376,7 @@ async function deleteMyWish(wish) {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: formBearHeader(auth.jwt),
-          'User-Id': auth.user_id,          
+          'User-Id': auth.user_id,
         },
       }
     );
@@ -407,11 +410,12 @@ async function verifyGoogleIdToken(userInfo) {
     );
 
     const body = await response.json();
-  
-    auth.googleIdVerified = response.status == 200 && body.ok == true;
+
+    auth.googleIdVerified = response.status == 200;
     auth.googleUserInfo = userInfo;
     auth.jwt = body.token;
     auth.user_id = body.user_id;
+    auth.message = body['message'];
 
     Store.emitChange(Events.GOOGLE_ID_VERIFIED_EVENT);
   } catch (error) {
