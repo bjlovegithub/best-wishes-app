@@ -92,7 +92,7 @@ var Store = assign({}, EventEmitter.prototype, {
 
   loginFailed() {
     auth = {
-      isLogin: false, loginFailed: true,
+      isLogin: false, loginFailed: true, message: auth.message
     };
 
     this.emitChange(Events.AUTH_EVENT);
@@ -120,6 +120,10 @@ var Store = assign({}, EventEmitter.prototype, {
       default:
         console.warn(err.message);
       }
+      auth = {
+        isLogin: false,
+      };
+      this.emitChange(Events.AUTH_EVENT);
     });
   },
 
@@ -233,6 +237,7 @@ async function getData(id) {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,
         }
       }
     );
@@ -254,6 +259,7 @@ async function updateThumbs(id) {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,          
         },
         body: JSON.stringify({id: wishMap[id], user_id: auth.user_id})
       }
@@ -283,6 +289,7 @@ async function loadMyWish() {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,          
         }
       }
     );
@@ -306,7 +313,6 @@ async function loadMyWish() {
 }
 
 async function submitMyWish(wish) {
-  console.log(wish);
   try {
     const response = await fetch(
       'http://localhost:9999/wish/', {
@@ -315,6 +321,7 @@ async function submitMyWish(wish) {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,
         },
         body: JSON.stringify(wish),
       }
@@ -342,6 +349,8 @@ async function submitFeedback(feedback) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,
         },
         body: JSON.stringify(feedback),
       }
@@ -367,6 +376,7 @@ async function deleteMyWish(wish) {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: formBearHeader(auth.jwt),
+          'User-Id': auth.user_id,
         },
       }
     );
@@ -400,11 +410,12 @@ async function verifyGoogleIdToken(userInfo) {
     );
 
     const body = await response.json();
-  
-    auth.googleIdVerified = response.status == 200 && body.ok == true;
+
+    auth.googleIdVerified = response.status == 200;
     auth.googleUserInfo = userInfo;
     auth.jwt = body.token;
     auth.user_id = body.user_id;
+    auth.message = body['message'];
 
     Store.emitChange(Events.GOOGLE_ID_VERIFIED_EVENT);
   } catch (error) {

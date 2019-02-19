@@ -10,6 +10,7 @@ import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
 import styles from '../styles/Main';
+import {BG_PICS} from '../common/Constants';
 
 const window = Dimensions.get('window');
 
@@ -48,9 +49,7 @@ class Board extends React.Component {
         arr.push(
           <ImageBackground
              style={styles.background}
-             source={{
-               uri: wishes[prop].backgroundPic
-             }}
+             source={BG_PICS[wishes[prop].backgroundPic]}
              key={prop}
              >
             <Wish wish={wishes[prop]} style={styles.wish} navigation={this.props.screenProps.rootNavigation}/>

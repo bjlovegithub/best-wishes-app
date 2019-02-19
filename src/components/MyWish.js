@@ -11,6 +11,7 @@ import Swipeout from 'react-native-swipeout';
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
+import {BG_PICS} from '../common/Constants';
 import {getDate, checkRequestError} from '../common/Util';
 
 import styles from '../styles/MyWish';
@@ -98,7 +99,7 @@ class MyWish extends React.Component {
   			  <View style = {styles.swipeView}>
             <ImageBackground
                style = {styles.backgroundImage}
-               source = {{ uri: wish[i].backgroundPic }}>
+               source = {BG_PICS[wish[i].backgroundPic]}>
               <View style = {styles.dateView}>
                 <Text style = {fontStyle}>{ wish[i].wish }</Text>
                 <Text style = {styles.countView}>

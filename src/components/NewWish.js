@@ -12,16 +12,11 @@ import Store from '../store/Store';
 import ActionType from '../common/ActionType';
 import Events from '../common/Events';
 import ErrorType from '../common/ErrorType';
+import {BG_PICS} from '../common/Constants';
 import Actions from '../actions/Actions';
 import {checkRequestError} from '../common/Util';
 
 import styles from '../styles/NewWish';
-
-const BGPics = {
-  pic1: require("../../assets/wish-bg-1.jpg"),
-  pic2: require("../../assets/wish-bg-2.jpg"),
-};
-
 
 class NewWish extends React.Component {
   constructor(props) {
@@ -100,6 +95,7 @@ class NewWish extends React.Component {
   }
 
   render() {
+    console.log(BG_PICS);
     return (
       <View style={styles.view}>
         <TextInput
@@ -183,7 +179,7 @@ class NewWish extends React.Component {
           <View style={styles.imageView}>
             <ImageBackground
                style={styles.imageBackground}
-               source={BGPics[this.state.backgroundPic]}
+               source={BG_PICS[this.state.backgroundPic]}
                >
               <View style={styles.imageTextStyle}>
                 <Text

@@ -42,6 +42,7 @@ class Login extends React.Component {
 
   componentWillUnmount() {
     AuthStore.removeChangeListener({"type": Events.AUTH_EVENT, "callback": this.onChange});
+    AuthStore.removeChangeListener({"type": Events.GOOGLE_ID_VERIFIED_EVENT, "callback": this.onVerified});
   }
 
   onVerified() {
@@ -63,12 +64,10 @@ class Login extends React.Component {
   }
 
   async googleSignIn() {
-    console.log(GOOGLE_IOS_CLIENT_ID);
 
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo);
       this.verifyGoogleIdToken(userInfo);
     } catch (error) {
       console.log(error);
@@ -135,7 +134,7 @@ class Login extends React.Component {
       if (this.state.loginFailed) {
         Alert.alert(
           'Error',
-          'Google Authentication Failed',
+          this.state.message,
           [
             {text: 'OK', onPress: () => console.log('OK Pressed')},
           ],
