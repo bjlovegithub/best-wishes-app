@@ -39,6 +39,8 @@ var storage = new Storage({
   }
 });
 
+const SERVER = "https://192.168.0.6";
+
 var Store = assign({}, EventEmitter.prototype, {
 
   fetchBoardWish() {
@@ -148,6 +150,10 @@ var Store = assign({}, EventEmitter.prototype, {
     return lastActionInfo;
   },
 
+  clearLastActionInfo() {
+    lastActionInfo = {};
+  },
+
   loadMyWish() {
     loadMyWish();
   },
@@ -208,7 +214,7 @@ var Store = assign({}, EventEmitter.prototype, {
 async function fetchBoardWish() {
   try {
     const response = await fetch(
-      'http://localhost:9999/board_wish', {
+      SERVER + '/board_wish', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -222,16 +228,19 @@ async function fetchBoardWish() {
       wishMap[w.id] = w;
     });
 
+    lastActionInfo = {};
+    
     Store.emitChange(Events.BOARD_WISH_EVENT);
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    lastActionInfo = {error: error.message, failed: true, type: getErrorType(0)};
   }
 }
 
 async function getData(id) {
   try {
     const response = await fetch(
-      'http://localhost:9999/wish/' + id, {
+      SERVER + '/wish/' + id, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -244,16 +253,19 @@ async function getData(id) {
     const data = await response.json();
     wishMap[id] = { wish: data.wish, thumbs: data.thumbs, sid: data.sid };
 
+    lastActionInfo = {};
+
     Store.emitChange(Events.WISH_EVENT);
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    lastActionInfo = {error: error.message, failed: true, type: getErrorType(0)};
   }
 }
 
 async function updateThumbs(id) {
   try {
     const response = await fetch(
-      'http://localhost:9999/wish/' + id, {
+      SERVER + '/wish/' + id, {
         method: 'PATCH',
         headers: {
           Accept: 'application/json',
@@ -276,14 +288,15 @@ async function updateThumbs(id) {
     }
     Store.emitChange(Events.THUMB_UP_EVENT);
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    lastActionInfo = {error: error.message, failed: true, type: getErrorType(0)};
   }
 }
 
 async function loadMyWish() {
   try {
     const response = await fetch(
-      'http://localhost:9999/my_wish/' + auth.user_id, {
+      SERVER + '/my_wish/' + auth.user_id, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -308,14 +321,16 @@ async function loadMyWish() {
       Store.emitChange(Events.MYWISH_LOADED_EVENT);
     }
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    lastActionInfo = {error: error.message, failed: true, type: getErrorType(0)};
+    Store.emitChange(Events.MYWISH_LOADED_EVENT);
   }
 }
 
 async function submitMyWish(wish) {
   try {
     const response = await fetch(
-      'http://localhost:9999/wish/', {
+      SERVER + '/wish/', {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
@@ -337,14 +352,16 @@ async function submitMyWish(wish) {
 
     Store.emitChange(Events.MYWISH_SAVED_EVENT);
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    lastActionInfo = {error: error.message, failed: true, type: getErrorType(0)};
+    Store.emitChange(Events.MYWISH_SAVED_EVENT);
   }
 }
 
 async function submitFeedback(feedback) {
   try {
     const response = await fetch(
-      'http://localhost:9999/feedback/' , {
+      SERVER + '/feedback/' , {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
@@ -356,6 +373,7 @@ async function submitFeedback(feedback) {
       }
     );
     const m = await response.json();
+
     if (response.ok) {
       lastActionInfo = {};
     } else {
@@ -363,14 +381,16 @@ async function submitFeedback(feedback) {
     }
     Store.emitChange(Events.FEEDBACK_SENT_EVENT);
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    lastActionInfo = {error: error.message, failed: true, type: getErrorType(0)};
+    Store.emitChange(Events.FEEDBACK_SENT_EVENT);
   }
 }
 
 async function deleteMyWish(wish) {
   try {
     const response = await fetch(
-      'http://localhost:9999/wish/' + wish.id , {
+      SERVER + '/wish/' + wish.id , {
         method: 'DELETE',
         headers: {
           Accept: 'application/json',
@@ -385,13 +405,15 @@ async function deleteMyWish(wish) {
   
     if (response.ok) {
       myWish = myWish.filter(i => i.id !== wish.id);
+      lastActionInfo = {};
     } else {
       lastActionInfo = {error: m.message, failed: true, type: getErrorType(response.status)};
     }
-    
+
     Store.emitChange(Events.MYWISH_DELETED_EVENT);
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    lastActionInfo = {error: error.message, failed: true, type: getErrorType(0)};
   }
 }
 
@@ -399,7 +421,7 @@ async function verifyGoogleIdToken(userInfo) {
   const idToken = userInfo.idToken;
   try {
     const response = await fetch(
-      'http://localhost:9999/verify_google_id_token', {
+      SERVER + '/verify_google_id_token', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -417,9 +439,12 @@ async function verifyGoogleIdToken(userInfo) {
     auth.user_id = body.user_id;
     auth.message = body['message'];
 
+    lastActionInfo = {};
+
     Store.emitChange(Events.GOOGLE_ID_VERIFIED_EVENT);
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    lastActionInfo = {error: error.message, failed: true, type: getErrorType(0)};
   }
 }
 

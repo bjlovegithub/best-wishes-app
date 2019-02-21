@@ -17,6 +17,7 @@ export function getDate(timestamp) {
 
 export function checkRequestError(component) {
   const actionState = Store.getLastActionInfo();
+  Store.clearLastActionInfo();
   if (actionState.failed == true) {    
     const func = null;
     if (actionState.type == ErrorType.ERR_AUTH_FAILED) {

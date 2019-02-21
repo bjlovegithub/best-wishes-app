@@ -95,7 +95,8 @@ class NewWish extends React.Component {
   }
 
   render() {
-    console.log(BG_PICS);
+    checkRequestError(this);
+    
     return (
       <View style={styles.view}>
         <TextInput

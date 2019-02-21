@@ -12,6 +12,7 @@ import AuthStore from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
 import { GOOGLE_IOS_CLIENT_ID } from '../common/Constants';
+import {checkRequestError} from '../common/Util';
 
 import styles from '../styles/Login';
 
@@ -56,7 +57,19 @@ class Login extends React.Component {
   }
 
   onChange() {
-    this.setState(AuthStore.getAuthInfo());
+    const error = AuthStore.getError();
+    if (error != null) {
+      Alert.alert(
+        'Error',
+        error.message,
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        { cancelable: false }
+      );
+    } else {   
+      this.setState(AuthStore.getAuthInfo());
+    }
   }
 
   verifyGoogleIdToken(token) {
@@ -113,6 +126,8 @@ class Login extends React.Component {
   }
 
   render() {
+    checkRequestError(this);
+    
     if (this.state.isLogin) {
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

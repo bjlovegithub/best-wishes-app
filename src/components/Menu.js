@@ -9,12 +9,14 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from 'react-native';
 import { List, ListItem } from "react-native-elements";
 
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
+import {checkRequestError} from '../common/Util';
 
 import styles from '../styles/Menu';
 
@@ -102,6 +104,8 @@ class Menu extends React.Component {
   }
 
   render() {
+    checkRequestError(this);
+    
     return (
       <ScrollView scrollsToTop={false} style={styles.menu}>
         <View style={styles.avatarContainer}>

@@ -3,7 +3,7 @@
 import React from 'react';
 import {
   StyleSheet, Text, View, ScrollView,
-  ImageBackground, Alert, RefreshControl
+  ImageBackground, Alert, RefreshControl,
 } from 'react-native';
 
 import Swipeout from 'react-native-swipeout';

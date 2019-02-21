@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-  StyleSheet, View, ImageBackground, Dimensions
+  StyleSheet, View, ImageBackground, Dimensions, Alert
 } from 'react-native';
 
 import Wish from './Wish';
@@ -11,6 +11,7 @@ import Actions from '../actions/Actions';
 import Events from '../common/Events';
 import styles from '../styles/Main';
 import {BG_PICS} from '../common/Constants';
+import {checkRequestError} from '../common/Util';
 
 const window = Dimensions.get('window');
 
@@ -42,6 +43,8 @@ class Board extends React.Component {
   }
 
   render() {
+    checkRequestError(this);
+    
     var arr = [];
     const { wishes } = this.state;
     for (var prop in wishes) {
