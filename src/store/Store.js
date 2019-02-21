@@ -39,7 +39,7 @@ var storage = new Storage({
   }
 });
 
-const SERVER = "https://192.168.0.6";
+const SERVER = "https://192.168.0.8";
 
 var Store = assign({}, EventEmitter.prototype, {
 
@@ -212,6 +212,7 @@ var Store = assign({}, EventEmitter.prototype, {
 });
 
 async function fetchBoardWish() {
+  console.log("-------------");      
   try {
     const response = await fetch(
       SERVER + '/board_wish', {
@@ -222,6 +223,7 @@ async function fetchBoardWish() {
         }
       }
     );
+    console.log("-------------123");
     const data = await response.json();
     data.forEach(w => {
       w.key = w.id;
@@ -232,6 +234,7 @@ async function fetchBoardWish() {
     
     Store.emitChange(Events.BOARD_WISH_EVENT);
   } catch (error) {
+    console.log("++++++++++++++");
     console.log(error);
     lastActionInfo = {error: error.message, failed: true, type: getErrorType(0)};
   }

@@ -57,19 +57,7 @@ class Login extends React.Component {
   }
 
   onChange() {
-    const error = AuthStore.getError();
-    if (error != null) {
-      Alert.alert(
-        'Error',
-        error.message,
-        [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ],
-        { cancelable: false }
-      );
-    } else {   
-      this.setState(AuthStore.getAuthInfo());
-    }
+    this.setState(AuthStore.getAuthInfo());
   }
 
   verifyGoogleIdToken(token) {
