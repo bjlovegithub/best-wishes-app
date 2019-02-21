@@ -6,6 +6,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    marginBottom: 0
+    marginBottom: 50,
   }
 });

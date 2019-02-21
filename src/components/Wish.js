@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-  Text, View, Image, TouchableOpacity, ImageBackground
+  Text, View, Image, TouchableOpacity, ImageBackground, Alert,
 } from 'react-native';
 
 import Store from '../store/Store';
@@ -46,6 +46,8 @@ class Wish extends React.Component {
   }
 
   render() {
+    checkRequestError(this);
+    
     // check request error
     if (Store.getThumbedWishId() == this.state.id)
       checkRequestError(this);
