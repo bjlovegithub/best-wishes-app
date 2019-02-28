@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 
 import Button from 'apsl-react-native-button';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import Store from '../store/Store';
 import ActionType from '../common/ActionType';
@@ -64,13 +65,29 @@ class NewWish extends React.Component {
 
   onSaved() {
     const status = Store.getLastActionInfo();
+    const goToMyWish = (component) => {
+
+      component.props.navigation.dispatch(StackActions.popToTop());
+
+      console.log("----------------");            
+
+      const goAction = StackActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'MyWish' }),
+        ],
+        key: null
+      });
+      component.props.navigation.dispatch(goAction);
+    };
+
     if (status.failed == null) {
       this.props.navigation.setParams({isEditing: false});
       Alert.alert(
         'Info',
         'Whooooo :)',
         [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
+          {text: 'OK', onPress: goToMyWish(this)},
         ],
         { cancelable: false }
       );
@@ -172,8 +189,8 @@ class NewWish extends React.Component {
                    backgroundPic: itemValue,
                 })}
                 >
-                <Picker.Item label={'Sea'} value={'pic1'} />
-                <Picker.Item label={'Sky'} value={'pic2'} />
+                <Picker.Item label={'Mountain'} value={'pic1'} />
+                <Picker.Item label={'Flower'} value={'pic2'} />
               </Picker>
             </View>
           </View>
