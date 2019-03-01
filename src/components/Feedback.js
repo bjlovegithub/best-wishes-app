@@ -17,6 +17,8 @@ import {
   Switch,
 } from 'react-native-clean-form';
 
+import { StackActions, NavigationActions } from 'react-navigation';
+
 import Store from '../store/Store';
 import Actions from '../actions/Actions';
 import Events from '../common/Events';
@@ -58,12 +60,24 @@ class Feedback extends React.Component {
 
   onChange() {
     const status = Store.getLastActionInfo();
+
+    const goToHome = (component) => {
+      const goAction = StackActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Home' }),
+        ],
+        key: null
+      });
+      component.props.navigation.dispatch(goAction);
+    };
+    
     if (status.failed != true) {
       Alert.alert(
         'Info',
         'Thanks for your feedback :)',
         [
-          {text: 'OK', onPress: () => {}},
+          {text: 'OK', onPress: goToHome(this)},
         ],
         { cancelable: false }
       );

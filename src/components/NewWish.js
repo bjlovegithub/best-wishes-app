@@ -66,14 +66,10 @@ class NewWish extends React.Component {
   onSaved() {
     const status = Store.getLastActionInfo();
     const goToMyWish = (component) => {
-
-      component.props.navigation.dispatch(StackActions.popToTop());
-
-      console.log("----------------");            
-
       const goAction = StackActions.reset({
-        index: 0,
+        index: 1,
         actions: [
+          NavigationActions.navigate({ routeName: 'Home' }),
           NavigationActions.navigate({ routeName: 'MyWish' }),
         ],
         key: null
