@@ -65,7 +65,6 @@ class Login extends React.Component {
   }
 
   async googleSignIn() {
-
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();

@@ -39,7 +39,7 @@ var storage = new Storage({
   }
 });
 
-const SERVER = "https://192.168.0.8";
+const SERVER = "https://best-wish-app-alb-1500803721.us-west-2.elb.amazonaws.com";
 
 var Store = assign({}, EventEmitter.prototype, {
 
@@ -57,12 +57,6 @@ var Store = assign({}, EventEmitter.prototype, {
     }    
 
     return arr;
-  },
-
-  fetchWish(id) {
-    if (wishMap[id] === undefined) {
-      getData(id);
-    }
   },
 
   getWish(id) {
@@ -232,31 +226,6 @@ async function fetchBoardWish() {
     lastActionInfo = {};
     
     Store.emitChange(Events.BOARD_WISH_EVENT);
-  } catch (error) {
-    console.log(error);
-    lastActionInfo = {error: error.message, failed: true, type: getErrorType(0)};
-  }
-}
-
-async function getData(id) {
-  try {
-    const response = await fetch(
-      SERVER + '/wish/' + id, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: formBearHeader(auth.jwt),
-          'User-Id': auth.user_id,
-        }
-      }
-    );
-    const data = await response.json();
-    wishMap[id] = { wish: data.wish, thumbs: data.thumbs, sid: data.sid };
-
-    lastActionInfo = {};
-
-    Store.emitChange(Events.WISH_EVENT);
   } catch (error) {
     console.log(error);
     lastActionInfo = {error: error.message, failed: true, type: getErrorType(0)};
