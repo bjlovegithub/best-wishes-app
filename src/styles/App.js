@@ -11,10 +11,10 @@ export default StyleSheet.create({
   },
   
   image: {
-    width: 360,
+    width: 380,
     height: 600,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
 
   slideView: {

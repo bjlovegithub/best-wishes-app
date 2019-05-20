@@ -39,6 +39,19 @@ var Actions = {
     });
   },
 
+  saveShowAppIntroSliderFlag: function(flag) {
+    ActionDispatcher.dispatch({
+      type: ActionType.ACT_SAVE_APP_INTRO_SLIDER_FLAG,
+      flag: flag,
+    });
+  },
+
+  loadShowAppIntroSliderFlag: function() {
+    ActionDispatcher.dispatch({
+      type: ActionType.ACT_LOAD_APP_INTRO_SLIDER_FLAG,
+    });
+  },
+
   loadMyWish: function() {
     ActionDispatcher.dispatch({
       type: ActionType.ACT_LOAD_MY_WISH,

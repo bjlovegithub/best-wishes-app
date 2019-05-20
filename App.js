@@ -16,6 +16,8 @@ import NewWish from './src/components/NewWish';
 import Feedback from './src/components/Feedback';
 import HomeScreen from './src/components/Home';
 import Actions from './src/actions/Actions';
+import AppStore from './src/store/Store';
+import Events from './src/common/Events';
 
 import styles from './src/styles/App';
 
@@ -102,7 +104,7 @@ const slides = [
   {
     key: 'somethun-dos',
     title: '',
-    text: 'Right Slide To Manage\nSignin With Google Account',
+    text: 'Right Slide To Manage Wishes',
     image: require('./assets/slide2.png'),
     backgroundColor: '#febe29',
   },
@@ -120,8 +122,31 @@ export default class App extends React.Component {
     super(props);
     
     this.state = {
-      showRealApp: false
+      showRealApp: false,
+      showSliderFlag: true,
     };
+
+    this.onChange = this.onChange.bind(this);
+  }
+
+  componentDidMount() {
+    AppStore.addChangeListener({
+      "type": Events.APP_SLIDER_FLAG_EVENT, "callback": this.onChange
+    });
+    
+    Actions.loadShowAppIntroSliderFlag();
+  }
+
+  componentWillUnmount() {
+    AppStore.removeChangeListener({
+      "type": Events.APP_SLIDER_FLAG_EVENT, "callback": this.onChange
+    });
+  }
+
+  onChange() {
+    this.setState({
+      showRealApp: true, showSliderFlag: AppStore.getShowAppIntroSliderFlag(),
+    });
   }
     
   _renderItem = (item) => {
@@ -141,7 +166,10 @@ export default class App extends React.Component {
   _onDone = () => {
     // User finished the introduction. Show real app through
     // navigation or simply by controlling state
-    this.setState({ showRealApp: true });
+    this.setState({ showRealApp: true, showSliderFlag: false });
+
+    // save the app intro slider flag into store
+    AppStore.saveShowAppIntroSliderFlag(false);
   }
 
   _renderNextButton = () => {
@@ -177,7 +205,7 @@ export default class App extends React.Component {
           renderItem={this._renderItem} slides={slides} onDone={this._onDone}
           renderDoneButton={this._renderDoneButton}
           renderNextButton={this._renderNextButton}
-          />
+        />
       );
     }
   }  

@@ -11,6 +11,9 @@ import ErrorType from '../common/ErrorType';
 import Storage from 'react-native-storage';
 import { AsyncStorage } from 'react-native';
 
+// the slider will not show if it is flase
+var showAppIntroSliderFlag = true;
+
 var auth = {};
 
 // map to save data for wishes
@@ -123,6 +126,37 @@ var Store = assign({}, EventEmitter.prototype, {
     });
   },
 
+  saveShowAppIntroSliderFlag(flag) {
+    storage.save({
+      key: 'show-app-intro-slider-flag',
+      id: '',
+      data: flag
+    });
+  },
+
+  loadShowAppIntroSliderFlag() {
+    storage.load({
+      key: 'show-app-intro-slider-flag',
+      id: '',
+      autoSync: true,
+      syncInBackground: true,
+    }).then(ret => {
+      showAppIntroSliderFlag = ret,
+      this.emitChange(Events.AUTH_EVENT);
+    }).catch(err => {
+      switch (err.name) {
+      case 'NotFoundError':
+        break;
+      case 'ExpiredError':
+        break;
+      default:
+        console.warn(err.message);
+      }
+      showAppIntroSliderFlag = true;
+      this.emitChange(Events.APP_SLIDER_FLAG_EVENT);
+    });
+  },
+
   deleteAuthToken(provider) {
     storage.remove({
       key: provider,
@@ -142,6 +176,10 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getLastActionInfo() {
     return lastActionInfo;
+  },
+
+  getShowAppIntroSliderFlag() {
+    return showAppIntroSliderFlag;
   },
 
   clearLastActionInfo() {
@@ -451,6 +489,12 @@ ActionDispatcher.register(function(action) {
       thumbedWishId = wishId;
       updateThumbs(wishId);
     }
+    break;
+  case ActionType.ACT_LOAD_APP_INTRO_SLIDER_FLAG:
+    Store.loadShowAppIntroSliderFlag();
+    break;
+  case ActionType.ACT_SAVE_APP_INTRO_SLIDER_FLAG:
+    Store.saveShowAppIntroSliderFlag(action.flag);
     break;
   case ActionType.ACT_LOAD_AUTH_TOKEN:
     Store.loadAuthToken();
