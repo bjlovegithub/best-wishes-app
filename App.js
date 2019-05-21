@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Alert, Image } from 'react-native';
+import { Text, View, Button, Alert, Image, ActivityIndicator } from 'react-native';
 
 import SideMenu from 'react-native-side-menu';
 
@@ -19,7 +19,8 @@ import Actions from './src/actions/Actions';
 import AppStore from './src/store/Store';
 import Events from './src/common/Events';
 
-import styles from './src/styles/App';
+import Styles from './src/styles/App';
+import CommonStyles from './src/styles/Common';
 
 // The app uses root stack as the navigator. The stack navigator will
 // return to the previous used screen when user tries to go back.
@@ -122,14 +123,13 @@ export default class App extends React.Component {
     super(props);
     
     this.state = {
-      showRealApp: false,
-      showSliderFlag: true,
+      showRealApp: false, loading: true,
     };
 
     this.onChange = this.onChange.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     AppStore.addChangeListener({
       "type": Events.APP_SLIDER_FLAG_EVENT, "callback": this.onChange
     });
@@ -144,21 +144,29 @@ export default class App extends React.Component {
   }
 
   onChange() {
-    this.setState({
-      showRealApp: true, showSliderFlag: AppStore.getShowAppIntroSliderFlag(),
-    });
+    const show = AppStore.getShowAppIntroSliderFlag();
+    if (show == true) {
+      this.setState({
+        showRealApp: false, loading: false,
+      });
+    } else {
+      this.setState({
+        showRealApp: true, loading: false,
+      });
+    }
+    
   }
     
   _renderItem = (item) => {
     return (
-      <View style={styles.slideView}>
+      <View style={Styles.slideView}>
         <Text></Text>
         <Text></Text>
         <Text></Text>
-        <Image source={item.image} style={styles.image} />
+        <Image source={item.image} style={Styles.image} />
         <Text></Text>
         <Text></Text>        
-        <Text style={styles.slideText}>{item.text}</Text>
+        <Text style={Styles.slideText}>{item.text}</Text>
       </View>
     );
   }
@@ -166,7 +174,7 @@ export default class App extends React.Component {
   _onDone = () => {
     // User finished the introduction. Show real app through
     // navigation or simply by controlling state
-    this.setState({ showRealApp: true, showSliderFlag: false });
+    this.setState({ showRealApp: true });
 
     // save the app intro slider flag into store
     AppStore.saveShowAppIntroSliderFlag(false);
@@ -174,7 +182,7 @@ export default class App extends React.Component {
 
   _renderNextButton = () => {
     return (
-      <View style={styles.buttonCircle}>
+      <View style={Styles.buttonCircle}>
         <Icon
           name="md-arrow-round-forward"
           color="rgba(255, 255, 255, .9)"
@@ -186,7 +194,7 @@ export default class App extends React.Component {
   
   _renderDoneButton = () => {
     return (
-      <View style={styles.buttonCircle}>
+      <View style={Styles.buttonCircle}>
         <Icon
           name="md-checkmark"
           color="rgba(255, 255, 255, .9)"
@@ -197,6 +205,18 @@ export default class App extends React.Component {
   }  
   
   render() {
+    console.log(AppStore.getShowAppIntroSliderFlag());
+    console.log(this.state.showRealApp);
+    console.log(this.state.loading);
+
+    if (this.state.loading) {
+      return (
+        <View style = {CommonStyles.indicator}>
+          <ActivityIndicator size = "large" />
+        </View>
+      );
+    }
+    
     if (this.state.showRealApp) {
       return <RootStack />;
     } else {

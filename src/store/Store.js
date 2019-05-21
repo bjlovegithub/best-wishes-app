@@ -132,6 +132,7 @@ var Store = assign({}, EventEmitter.prototype, {
       id: '',
       data: flag
     });
+    console.log("Save slider flag: " + flag);
   },
 
   loadShowAppIntroSliderFlag() {
@@ -141,8 +142,9 @@ var Store = assign({}, EventEmitter.prototype, {
       autoSync: true,
       syncInBackground: true,
     }).then(ret => {
+      console.log("slider flag from store: " + ret);
       showAppIntroSliderFlag = ret,
-      this.emitChange(Events.AUTH_EVENT);
+      this.emitChange(Events.APP_SLIDER_FLAG_EVENT);
     }).catch(err => {
       switch (err.name) {
       case 'NotFoundError':
